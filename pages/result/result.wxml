@@ -1,0 +1,29 @@
+<view class="page">
+  <view class="page__bd">
+    <view class="weui-panel weui-panel_access">
+      <view class="weui-panel__hd">查询：粤XFH115</view>
+      <view class="weui-panel__bd">
+        <navigator
+          class="item"
+          url="/pages/detail/detail/{{item.id}}"
+          wx:for="{{resultArray}}"
+          wx:key="{{item.id}}"
+        >
+          <image
+            class="screenshot"
+            src="{{item.screenshot}}" 
+          />
+          <view class="short" wx:if="{{item.isCrash && !item.isRule}}">事故</view>
+          <view class="short" wx:elif="{{!item.isCrash && item.isRule}}">违章</view>
+          <view class="short" wx:elif="{{item.isCrash && item.isRule}}">违章·事故</view>
+        </navigator>
+      </view>
+      <view class="weui-panel__ft">
+          <view class="weui-cell weui-cell_access weui-cell_link">
+            <view class="weui-cell__bd">查看更多</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </view>
+      </view>
+    </view>
+  </view>
+</view>

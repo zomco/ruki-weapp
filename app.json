@@ -1,12 +1,19 @@
 {
     "pages": [
         "pages/index/index",
-        "pages/chat/chat"
+        "pages/result/result"
     ],
     "window": {
         "backgroundTextStyle": "light",
         "navigationBarBackgroundColor": "#333",
         "navigationBarTitleText": "路几",
         "navigationBarTextStyle": "white"
-    }
+    },
+    "networkTimeout": {
+      "request": 10000,
+      "connectSocket": 10000,
+      "uploadFile": 10000,
+      "downloadFile": 10000
+    },
+    "debug": true
 }
