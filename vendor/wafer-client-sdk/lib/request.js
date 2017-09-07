@@ -5,11 +5,13 @@ var loginLib = require('./login');
 
 var noop = function noop() {};
 
-var buildAuthHeader = function buildAuthHeader(session) {
+var buildSessionHeader = function buildSessionHeader() {
+    var session = Session.get();
     var header = {};
 
-    if (session) {
-        header[constants.WX_HEADER_SKEY] = session;
+    if (session && session.id && session.skey) {
+        header[constants.WX_HEADER_ID] = session.id;
+        header[constants.WX_HEADER_SKEY] = session.skey;
     }
 
     return header;
@@ -72,7 +74,7 @@ function request(options) {
 
     // 实际进行请求的方法
     function doRequest() {
-        var authHeader = buildAuthHeader(Session.get());
+        var authHeader = buildSessionHeader();
 
         wx.request(utils.extend({}, options, {
             header: utils.extend({}, originHeader, authHeader),
@@ -80,24 +82,33 @@ function request(options) {
             success: function (response) {
                 var data = response.data;
 
-                var error, message;
-                if (data && data.code === -1) {
+                // 如果响应的数据里面包含 SDK Magic ID，表示被服务端 SDK 处理过，此时一定包含登录态失败的信息
+                if (data && data[constants.WX_SESSION_MAGIC_ID]) {
+                    // 清除登录态
                     Session.clear();
-                    // 如果是登录态无效，并且还没重试过，会尝试登录后刷新凭据重新请求
-                    if (!hasRetried) {
-                        hasRetried = true;
-                        doRequestWithLogin();
-                        return;
-                    }
 
-                    message = '登录态已过期';
-                    error = new RequestError(data.error, message);
+                    var error, message;
+                    if (data.error === constants.ERR_INVALID_SESSION) {
+                        // 如果是登录态无效，并且还没重试过，会尝试登录后刷新凭据重新请求
+                        if (!hasRetried) {
+                            hasRetried = true;
+                            doRequestWithLogin();
+                            return;
+                        }
+
+                        message = '登录态已过期';
+                        error = new RequestError(data.error, message);
+
+                    } else {
+                        message = '鉴权服务器检查登录态发生错误(' + (data.error || 'OTHER') + ')：' + (data.message || '未知错误');
+                        error = new RequestError(constants.ERR_CHECK_LOGIN_FAILED, message);
+                    }
 
                     callFail(error);
                     return;
-                } else {
-                    callSuccess.apply(null, arguments);
                 }
+
+                callSuccess.apply(null, arguments);
             },
 
             fail: callFail,
@@ -110,4 +121,5 @@ function request(options) {
 module.exports = {
     RequestError: RequestError,
     request: request,
+    buildSessionHeader: buildSessionHeader
 };

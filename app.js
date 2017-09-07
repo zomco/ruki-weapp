@@ -22,14 +22,43 @@
  # SOFTWARE.
  */
 
-var qcloud = require('./vendor/wafer2-client-sdk/index');
-var config = require('./config');
+const wafer = require('./vendor/wafer-client-sdk/index');
+const config = require('./config');
+
+const login = function() {
+  wx.showLoading({
+    title: '登录中..',
+  })
+  wafer.login({
+    success: function () {
+      wx.hideLoading();
+      wx.showToast({
+        title: '登录成功',
+      });
+    },
+    fail: function (err) {
+      wx.hideLoading();
+      const { message } = err;
+      wx.showModal({
+        title: '登录失败',
+        content: message,
+        showCancel: false,
+        success: function (res) {
+          if (res.confirm) {
+            login();
+          }
+        },
+      });
+    }
+  });
+};
 
 App({
     /**
      * 小程序初始化时执行，我们初始化客户端的登录地址，以支持所有的会话操作
      */
     onLaunch() {
-        qcloud.setLoginUrl(config.service.loginUrl);
+        wafer.setLoginUrl(config.service.loginUrl);
+        // login();
     }
 });

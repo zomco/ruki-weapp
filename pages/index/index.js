@@ -21,6 +21,28 @@
  # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  # SOFTWARE.
  */
+const wafer = require('../../vendor/wafer-client-sdk/index');
+const config = require('../../config');
+
+const indexToPlate = function(multiArray, multiIndex) {
+  const values = [];
+  for (let i = 0; i < multiArray.length; i++) {
+    values.push(multiArray[i][multiIndex[i]]);
+  }
+  return values.join('');
+};
+
+const isValidPlate = function(plate) {
+  let count = 0;
+  const sequences = plate.substr(2);
+  const pattern = new RegExp('[A-Z]');
+  for (let i = 0; i < sequences.length; i++) {
+    if (pattern.test(sequences[i])) {
+      count++;
+    }
+  }
+  return count <= 2;
+};
 
 Page({
     data: {
@@ -34,15 +56,43 @@ Page({
         ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
       ],
       multiIndex: [0, 0, 0, 0, 0, 0, 0],
-      tags: ['粤XFH115', '粤E88H63', '粤E88H63', '粤E88H63', '粤E88H63', '粤E88H63'],
+      tags: ['粤X12345', '粤E12345', '粤E12345', '粤E12345', '粤E12345', '粤E12345'],
+      loading: false,
+      valid: true,
     },
     bindMultiPickerChange: function(e) {
-
+      const { value } = e.detail;
+      const { multiArray, multiIndex } = this.data;
+      const plate = indexToPlate(multiArray, multiIndex);
+      this.setData({ valid: isValidPlate(plate) });
     },
     bindMultiPickerColumnChange: function(e) {
       const { column, value } = e.detail;
       const { multiIndex } = this.data;
       multiIndex[column] = value;
       this.setData({ multiIndex });
+    },
+    bindSearchButton: function(e) {
+      this.setData({ loading: true });
+      const { multiArray, multiIndex } = this.data;
+      const plate = indexToPlate(multiArray, multiIndex);
+      const me = this;
+      wafer.request({
+        login: true,
+        url: config.service.searchUrl,
+        data: { plate },
+        success: function(res) {
+          me.setData({ loading: false });
+          console.log(res);
+        },
+        fail: function(err) {
+          me.setData({ loading: false });
+          const { message } = err;
+          wx.showModal({
+            title: '查询失败',
+            content: message,
+          });
+        }
+      });
     },
 });

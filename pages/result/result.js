@@ -38,4 +38,8 @@ Page({
         video: 'https://www.ruki.pw/video/a9020c30-8d60-11e7-b61d-5f739919cc47',
       }]
     },
+    onLoad: function(options) {
+      const { q } = options;
+      console.log(options);
+    },
 });

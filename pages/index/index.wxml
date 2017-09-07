@@ -11,6 +11,7 @@
       bindcolumnchange="bindMultiPickerColumnChange" 
       value="{{multiIndex}}" 
       range="{{multiArray}}"
+      disabled="{{loading}}"
     >
       <button type="default">{{multiArray[0][multiIndex[0]]}}·{{multiArray[1][multiIndex[1]]}} {{multiArray[2][multiIndex[2]]}} {{multiArray[3][multiIndex[3]]}} {{multiArray[4][multiIndex[4]]}} {{multiArray[5][multiIndex[5]]}} {{multiArray[6][multiIndex[6]]}}</button>
     </picker>
@@ -18,6 +19,8 @@
       class="weui-btn"
       type="primary"
       loading="{{loading}}"
+      bindtap="bindSearchButton"
+      disabled="{{!valid || loading}}"
     >
       查询
     </button>
@@ -35,9 +38,9 @@
       </view>
     </view>
   </view>
-  <!-- <view class="page_ft">
-    <view class="weui-footer">
-      <view class="weui-footer__text">© 2017 YAwsMe, LLC</view>
+  <view class="page_ft">
+    <view class="weui-footer weui-footer_fixed-bottom">
+      <view class="weui-footer__text">© 2017 ruki.pw</view>
     </view>
-  </view> -->
+  </view> 
 </view>
