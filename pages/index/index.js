@@ -24,7 +24,7 @@
 const wafer = require('../../vendor/wafer-client-sdk/index');
 const config = require('../../config');
 
-const indexToPlate = function(multiArray, multiIndex) {
+const indexToChars = function(multiArray, multiIndex) {
   const values = [];
   for (let i = 0; i < multiArray.length; i++) {
     values.push(multiArray[i][multiIndex[i]]);
@@ -32,9 +32,9 @@ const indexToPlate = function(multiArray, multiIndex) {
   return values.join('');
 };
 
-const isValidPlate = function(plate) {
+const isValidChars = function(chars) {
   let count = 0;
-  const sequences = plate.substr(2);
+  const sequences = chars.substr(2);
   const pattern = new RegExp('[A-Z]');
   for (let i = 0; i < sequences.length; i++) {
     if (pattern.test(sequences[i])) {
@@ -63,8 +63,8 @@ Page({
     bindMultiPickerChange: function(e) {
       const { value } = e.detail;
       const { multiArray, multiIndex } = this.data;
-      const plate = indexToPlate(multiArray, multiIndex);
-      this.setData({ valid: isValidPlate(plate) });
+      const chars = indexToChars(multiArray, multiIndex);
+      this.setData({ valid: isValidChars(chars) });
     },
     bindMultiPickerColumnChange: function(e) {
       const { column, value } = e.detail;
@@ -75,15 +75,22 @@ Page({
     bindSearchButton: function(e) {
       this.setData({ loading: true });
       const { multiArray, multiIndex } = this.data;
-      const plate = indexToPlate(multiArray, multiIndex);
+      const chars = indexToChars(multiArray, multiIndex);
       const me = this;
       wafer.request({
         login: true,
         url: config.service.searchUrl,
-        data: { plate },
+        data: { chars },
         success: function(res) {
           me.setData({ loading: false });
-          console.log(res);
+          try {
+            wx.setStorageSync('results', res.data.results);
+            wx.navigateTo({
+              url: `/pages/result/result`,
+            });
+          } catch (e) {
+            console.error(e);
+          }
         },
         fail: function(err) {
           me.setData({ loading: false });

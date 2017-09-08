@@ -1,0 +1,21 @@
+<view class="page">
+  <view class="page__hd">
+      <view class="page__title">视频地址</view>
+      <view class="page__desc">长按二维码或复制链接访问</view>
+  </view>
+  <view class="page__bd page__bd_spacing">
+      <view class="img-box">
+        <canvas 
+          bindtap="previewImg" 
+          hidden="{{canvasHidden}}" 
+          style="width: 686rpx;height: 686rpx;background:#f1f1f1;" 
+          canvas-id="mycanvas"
+        />
+      </view>
+  </view>
+  <view class="page_ft">
+    <view class="weui-footer weui-footer_fixed-bottom">
+      <view class="weui-footer__text">© 2017 ruki.pw</view>
+    </view>
+  </view> 
+</view>

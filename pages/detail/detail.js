@@ -22,18 +22,43 @@
  # SOFTWARE.
  */
 
+const QR = require('../../vendor/qrcode/index');
+const setCanvasSize = function() {
+  var size = {};
+  try {
+    var res = wx.getSystemInfoSync();
+    var scale = 750 / 686;//不同屏幕下canvas的适配比例；设计稿是750宽
+    var width = res.windowWidth / scale;
+    var height = width;//canvas画布为正方形
+    size.w = width;
+    size.h = height;
+  } catch (e) {
+    // Do something when catch error
+    console.log("获取设备信息失败" + e);
+  }
+  return size;
+};
+
 Page({
     data: {
-      list: []
+      item: []
     },
     onLoad: function(options) {
       try {
         const results = wx.getStorageSync('results');
         if (results) {
-          this.setData({ list: results });
+          const result = results.find(function(t) {
+            return t.id === options.id;
+          })
+          this.setData({ item: result });
         }
       } catch (e) {
         console.error(e);
       }
+    },
+    onReady: function () {
+      const size = setCanvasSize();
+      const { item: { source } } = this.data;
+      QR.qrApi.draw(source, "mycanvas", size.w, size.h);
     },
 });

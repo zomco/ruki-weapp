@@ -5,17 +5,17 @@
       <view class="weui-panel__bd">
         <view 
           class="weui-media-box weui-media-box_text"
-          wx:for="{{resultArray}}"
+          wx:for="{{list}}"
           wx:key="{{item.id}}"
         >
           <view class="weui-media-box__title weui-media-box__title_in-text">
             <navigator
               class="item"
-              url="/pages/detail/detail/{{item.id}}"
+              url="/pages/detail/detail?id={{item.id}}"
             >
               <image
                 class="screenshot"
-                src="{{item.screenshot}}" 
+                src="{{item.posterFile}}" 
               />
               <view class="short" wx:if="{{item.isCrash && !item.isRule}}">事故</view>
               <view class="short" wx:elif="{{!item.isCrash && item.isRule}}">违章</view>
@@ -24,9 +24,8 @@
           </view>
           <view class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</view>
           <view class="weui-media-box__info">
-            <view class="weui-media-box__info__meta">文字来源</view>
-            <view class="weui-media-box__info__meta">时间</view>
-            <view class="weui-media-box__info__meta weui-media-box__info__meta_extra">其它信息</view>
+            <view class="weui-media-box__info__meta">{{item.when}}</view>
+            <view class="weui-media-box__info__meta">{{item.where}}</view>
           </view>
         </view>
         <view class="weui-loadmore weui-loadmore_line">
