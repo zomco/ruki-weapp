@@ -1,40 +1,42 @@
-<view class="page">
+<view class="page" bindtap="bindKeyboardHide">
   <view class="page__hd">
       <view class="page__title">输入车牌</view>
       <view class="page__desc">查询出现过车牌号码的行车记录视频。</view>
   </view>
   <view class="page__bd page__bd_spacing">
-    <picker
-      class="weui-btn"
-      mode="multiSelector" 
-      bindchange="bindMultiPickerChange" 
-      bindcolumnchange="bindMultiPickerColumnChange" 
-      value="{{multiIndex}}" 
-      range="{{multiArray}}"
-      disabled="{{loading}}"
-    >
-      <button type="default">{{multiArray[0][multiIndex[0]]}}·{{multiArray[1][multiIndex[1]]}} {{multiArray[2][multiIndex[2]]}} {{multiArray[3][multiIndex[3]]}} {{multiArray[4][multiIndex[4]]}} {{multiArray[5][multiIndex[5]]}} {{multiArray[6][multiIndex[6]]}}</button>
-    </picker>
+    <view class="chars">
+      <button 
+        class="{{index === charsIndex? 'weui-btn mini-btn button-active': 'weui-btn mini-btn'}}" 
+        type="default" 
+        size="mini" 
+        wx:for="{{charsArray}}" 
+        wx:key="{{index}}"
+        data-index="{{index}}"
+        bindtap="bindKeyboardShow"
+      >
+        {{item}}
+      </button>
+    </view>
     <button
       class="weui-btn"
       type="primary"
-      loading="{{loading}}"
-      bindtap="bindSearchButton"
-      disabled="{{!valid || loading}}"
+      bindtap="bindSearch"
+      disabled="{{loading}}"
     >
       查询
     </button>
     <view class="hot">
       <view class="title">热门查询</view>
       <view class="tags">
-        <navigator
+        <view
           class="tag"
-          url="/pages/result/result?q={{item}}"
           wx:for="{{tags}}"
           wx:key="index"
+          data-value="{{item}}"
+          bindtap="bindTagSearch"
         >
           {{item}}
-        </navigator>
+        </view>
       </view>
     </view>
   </view>
@@ -42,5 +44,20 @@
     <view class="weui-footer weui-footer_fixed-bottom">
       <view class="weui-footer__text">© 2017 ruki.pw</view>
     </view>
-  </view> 
+  </view>
 </view>
+<block wx:if="{{keyboard}}">
+  <view class="keyboard">
+    <button
+      class="{{item === charsArray[charsIndex]? 'weui-btn mini-btn button-active': 'weui-btn mini-btn'}}" 
+      type="default" 
+      size="mini" 
+      wx:for="{{keyboardArray}}" 
+      wx:key="{{index}}"
+      bindtap="bindKeyboardButton"
+      data-value="{{item}}" 
+    >
+      {{item}}
+    </button>
+  </view>
+</block> 

@@ -24,10 +24,15 @@
 
 Page({
     data: {
-      list: []
+      plate: '',
+      list: [],
     },
     onLoad: function(options) {
       try {
+        const chars = wx.getStorageSync('chars');
+        if (chars) {
+          this.setData({ plate: chars });
+        }
         const results = wx.getStorageSync('results');
         if (results) {
           this.setData({ list: results });
