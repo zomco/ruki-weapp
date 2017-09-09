@@ -59,18 +59,58 @@ Page({
       // 选中的车牌
       charsArray: ['京', 'A', '0', '0', '0', '0', '0'],
       // 提示标签
-      tags: ['粤X12345', '粤E12345', '粤E12345', '粤E12345', '粤E12345', '粤E12345'],
+      tags: [],
       // 查询状态
       loading: false,
     },
+    // 页面加载获取用户位置
     onLoad: function(options) {
-      wx.getLocation({
-        success: function(res) {
-          const { latitude, longitude, speed, accuracy } = res;
-          console.log(latitude, longitude, speed, accuracy);
+      // wx.getLocation({
+      //   success: function(res) {
+      //     const { latitude, longitude } = res;
+      //     wx.setStorageSync('location', res);
+      //   },
+      // });
+    },
+    // 页面显示加载标签
+    onShow: function() {
+      const location = wx.getStorageSync('location');
+      const me = this;
+      wafer.request({
+        url: config.service.showUrl,
+        data: { 
+          latitude: location && location.latitude,
+          longitude: location && location.longitude, 
+        },
+        success: function (res) {
+          me.setData({ 'tags': res.data.suggests });
+        },
+        fail: function (err) {
+          const { message } = err;
+          wx.showModal({
+            title: '加载失败',
+            content: '网络或系统问题导致加载失败',
+            showCancel: false,
+            cancelText: '知道了',
+          });
         },
       });
     },
+    // 点击查询按钮，执行查询
+    bindButtonSearch: function(e) {
+      const { detail: { userInfo } } = e;
+      if (userInfo) {
+        this.bindSearch();
+      } else {
+        wx.showModal({
+          title: '授权失败',
+          content: '非授权用户无法查询',
+          showCancel: false,
+          cancelText: '知道了',
+        });
+      }
+    },
+    // 执行查询
     bindSearch: function(e) {
       const me = this;
       wx.showLoading({
@@ -78,10 +118,15 @@ Page({
       });
       me.setData({ loading: true });
       const chars = this.data.charsArray.join('');
+      const location = wx.getStorageSync('location');
       wafer.request({
         login: true,
         url: config.service.searchUrl,
-        data: { chars },
+        data: { 
+          chars, 
+          latitude: location && location.latitude,
+          longitude: location && location.longitude,
+        },
         success: function(res) {
           wx.hideLoading();
           me.setData({ loading: false });
@@ -101,22 +146,25 @@ Page({
           const { message } = err;
           wx.showModal({
             title: '查询失败',
-            content: message,
+            content: '网络或系统问题导致查询失败',
           });
         }
       });
     },
+    // 点击标签，执行查询
     bindTagSearch: function(e) {
       const { dataset: { value } } = e.target;
       this.setData({ charsArray: value.split('') });
       this.bindSearch();
     },
+    // 点击虚拟键盘，触发车牌字符改变
     bindKeyboardButton: function(e) {
       const { dataset: { value } } = e.target;
       const { charsArray, charsIndex } = this.data;
       charsArray[charsIndex] = value;
       this.setData({ charsArray });
     },
+    // 点击车牌字符，触发显示虚拟键盘
     bindKeyboardShow: function(e) {
       const { target: { dataset: { index } } } = e;
       const { charsArray } = this.data;
@@ -130,6 +178,7 @@ Page({
       }
       this.setData({ keyboard: true, keyboardArray, charsIndex: index});
     },
+    // 点击车牌字符以外的区域，触发隐藏虚拟键盘
     bindKeyboardHide: function(e) {
       const { target: { dataset: { index } } } = e;
       if (index === undefined) {

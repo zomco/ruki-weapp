@@ -26,8 +26,7 @@
 var host = 'http://localhost:3000';
 
 var config = {
-
-    // 下面的地址配合云端 Demo 工作
+  
     service: {
         host,
 
@@ -36,6 +35,9 @@ var config = {
 
         // 查询地址，用于查询车牌
         searchUrl: `${host}/weapp/search`,
+
+        // 展示地址，用于展示标签
+        showUrl: `${host}/weapp/show`,
     }
 };
 

@@ -20,24 +20,31 @@
     <button
       class="weui-btn"
       type="primary"
-      bindtap="bindSearch"
+      bindgetuserinfo="bindButtonSearch"
       disabled="{{loading}}"
+      open-type="getUserInfo"
+
     >
       查询
     </button>
     <view class="hot">
       <view class="title">热门查询</view>
-      <view class="tags">
-        <view
-          class="tag"
-          wx:for="{{tags}}"
-          wx:key="index"
-          data-value="{{item}}"
-          bindtap="bindTagSearch"
-        >
-          {{item}}
+      <block wx:if="{{tags.length === 0}}">
+        <view class="tips">暂无数据</view>
+      </block>
+      <block wx:if="{{tags.length > 0}}">
+        <view class="tags">
+          <view
+            class="tag"
+            wx:for="{{tags}}"
+            wx:key="index"
+            data-value="{{item.chars}}"
+            bindtap="bindTagSearch"
+          >
+            {{item.chars}}
+          </view>
         </view>
-      </view>
+      </block>
     </view>
   </view>
   <view class="page_ft">

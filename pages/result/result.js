@@ -25,17 +25,17 @@
 Page({
     data: {
       plate: '',
-      list: [],
+      resultArray: [],
     },
     onLoad: function(options) {
       try {
         const chars = wx.getStorageSync('chars');
         if (chars) {
-          this.setData({ plate: chars });
+          this.setData({ chars });
         }
         const results = wx.getStorageSync('results');
         if (results) {
-          this.setData({ list: results });
+          this.setData({ resultArray: results });
         }
       } catch (e) {
         console.error(e);
