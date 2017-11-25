@@ -66,3 +66,16 @@
   color: rgba(0, 0, 0, 0.6);
   background-color: #DEDEDE;
 }
+
+.ads {
+  font-size: 30rpx;
+  position: fixed;
+  bottom: 200rpx;
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+  color: rgb(136, 136, 136);
+}
+
+.ads .motto {
+  
+}

@@ -1,21 +1,37 @@
 <view class="page">
   <view class="page__hd">
-      <view class="page__title">视频地址</view>
-      <view class="page__desc">长按二维码或复制链接访问</view>
-  </view>
-  <view class="page__bd page__bd_spacing">
-      <view class="img-box">
-        <canvas 
-          bindtap="previewImg" 
-          hidden="{{canvasHidden}}" 
-          style="width: 686rpx;height: 686rpx;background:#f1f1f1;" 
-          canvas-id="mycanvas"
-        />
+      <view class="page__title">{{item.title}}</view>
+      <view class="page__desc">
+        <view wx:if="{{item.isCrash && !item.isRule}}">小心开得万年车</view>
+        <view wx:elif="{{!item.isCrash && item.isRule}}">老大哥在看著你</view>
+        <view wx:elif="{{item.isCrash && item.isRule}}">大概是天选之子</view>
       </view>
+  </view>
+  <view class="page__bd">
+    <view class="weui-media-box weui-media-box_text">
+      <view class="weui-media-box__title weui-media-box__title_in-text">
+        <view class="item">
+          <video class="screenshot" src="{{item.videoFile}}"></video>
+        </view>
+      </view>
+    </view>
+    <view class="weui-loadmore weui-loadmore_line">
+      <view class="weui-loadmore__tips weui-loadmore__tips_in-line">或前往 www.ruki.pw 查看更多</view>
+    </view>
+    <view class="copy">
+      <button 
+        class="weui-btn" 
+        type="default"
+        plain="true"
+        bindtap="bindCopyLink"
+      >
+        复制链接地址
+      </button>
+    </view>
   </view>
   <view class="page_ft">
     <view class="weui-footer weui-footer_fixed-bottom">
-      <view class="weui-footer__text">© 2017 ruki.pw</view>
+      <view class="weui-footer__text">© 2017 YAwsMe.com</view>
     </view>
   </view> 
 </view>

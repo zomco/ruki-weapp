@@ -58,10 +58,16 @@ Page({
       charsIndex: null,
       // 选中的车牌
       charsArray: ['京', 'A', '0', '0', '0', '0', '0'],
-      // 提示标签
-      tags: [],
+      // 热门标签
+      hotTags: [],
+      // 最新标签
+      newTags: [],
       // 查询状态
       loading: false,
+      // 车牌总数
+      plateCount: 0,
+      // 当前地址
+      address: '',
     },
     // 页面加载获取用户位置
     onLoad: function(options) {
@@ -83,7 +89,12 @@ Page({
           longitude: location && location.longitude, 
         },
         success: function (res) {
-          me.setData({ 'tags': res.data.suggests });
+          me.setData({ 
+            'hotTags': res.data.hotTags,
+            'newTags': res.data.newTags,
+            'address': res.data.address,
+            'plateCount': res.data.plateCount
+          });
         },
         fail: function (err) {
           const { message } = err;

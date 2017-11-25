@@ -1,7 +1,7 @@
 <view class="page">
   <view class="page__bd">
     <view class="weui-panel weui-panel_access">
-      <view class="weui-panel__hd">“{{chars}}” 的视频</view>
+      <view class="weui-panel__hd">“{{chars}}” 共 {{resultArray.length}} 条行车记录</view>
       <view class="weui-panel__bd">
         <view 
           class="weui-media-box weui-media-box_text"
@@ -15,14 +15,14 @@
             >
               <image
                 class="screenshot"
-                src="{{item.posterFile}}" 
+                src="{{item.anprFile}}" 
               />
               <view class="short" wx:if="{{item.isCrash && !item.isRule}}">事故</view>
-              <view class="short" wx:elif="{{!item.isCrash && item.isRule}}">违章</view>
-              <view class="short" wx:elif="{{item.isCrash && item.isRule}}">违章·事故</view>
+              <view class="short" wx:elif="{{!item.isCrash && item.isRule}}">规则之外</view>
+              <view class="short" wx:elif="{{item.isCrash && item.isRule}}">规则之外·事故</view>
             </navigator>
           </view>
-          <view class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</view>
+          <view class="weui-media-box__desc">{{item.title}}</view>
           <view class="weui-media-box__info">
             <view class="weui-media-box__info__meta">{{item.when}}</view>
             <view class="weui-media-box__info__meta">{{item.where}}</view>
@@ -35,7 +35,7 @@
         </block>
         <block wx:if="{{resultArray.length > 0}}">
           <view class="weui-loadmore weui-loadmore_line">
-            <view class="weui-loadmore__tips weui-loadmore__tips_in-line weui-loadmore__tips_in-dot"></view>
+            <view class="weui-loadmore__tips weui-loadmore__tips_in-line">以上是机器分类结果</view>
           </view>
         </block>
       </view>
@@ -43,7 +43,7 @@
   </view>
   <view class="page_ft">
     <view class="weui-footer weui-footer_fixed-bottom">
-      <view class="weui-footer__text">© 2017 ruki.pw</view>
+      <view class="weui-footer__text">© 2017 YAwsMe.com</view>
     </view>
   </view> 
 </view>

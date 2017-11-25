@@ -23,12 +23,12 @@
  */
 
 const QR = require('../../vendor/qrcode/index');
-const setCanvasSize = function() {
+const setCanvasSize = function(boxWidth) {
   var size = {};
   try {
     var res = wx.getSystemInfoSync();
     var scale = 750 / 686;//不同屏幕下canvas的适配比例；设计稿是750宽
-    var width = res.windowWidth / scale;
+    var width = boxWidth ? boxWidth / scale: res.windowWidth / scale;
     var height = width;//canvas画布为正方形
     size.w = width;
     size.h = height;
@@ -57,8 +57,33 @@ Page({
       }
     },
     onReady: function () {
-      const size = setCanvasSize();
+      const size = setCanvasSize(100);
       const { item: { source } } = this.data;
       QR.qrApi.draw(source, "mycanvas", size.w, size.h);
     },
+    bindCopyLink: function () {
+      const { item: { source } } = this.data;
+      wx.setClipboardData({
+        data: source,
+        success: function (res) {
+          wx.showToast({
+            title: '复制成功',
+          });
+        }
+      })
+    },
+    onShareAppMessage: function (options) {
+      const { item: { title, anprFile, id } } = this.data;
+      return {
+        title: title,
+        path: `/page/detail/detail?id=${id}`,
+        imageUrl: anprFile,
+        success: function (res) {
+          // 转发成功
+        },
+        fail: function (res) {
+          // 转发失败
+        }
+      }
+    }
 });

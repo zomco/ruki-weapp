@@ -22,8 +22,8 @@
  # SOFTWARE.
  */
 
-// 此处主机域名修改成腾讯云解决方案分配的域名
-var host = 'http://localhost:3000';
+var host = 'https://www.ruki.pw';
+// var host = 'http://localhost:3000';
 
 var config = {
   
@@ -38,6 +38,10 @@ var config = {
 
         // 展示地址，用于展示标签
         showUrl: `${host}/weapp/show`,
+    },
+
+    env: {
+        detail: false,
     }
 };
 

@@ -1,7 +1,7 @@
 <view class="page" bindtap="bindKeyboardHide">
   <view class="page__hd">
-      <view class="page__title">输入车牌</view>
-      <view class="page__desc">查询出现过车牌号码的行车记录视频。</view>
+      <view class="page__title">查询行车记录</view>
+      <view class="page__desc">已收录 {{plateCount}} 个车牌</view>
   </view>
   <view class="page__bd page__bd_spacing">
     <view class="chars">
@@ -29,14 +29,19 @@
     </button>
     <view class="hot">
       <view class="title">热门查询</view>
-      <block wx:if="{{tags.length === 0}}">
-        <view class="tips">暂无数据</view>
+      <block wx:if="{{hotTags.length === 0}}">
+        <view class="tips">
+          <view class="weui-loadmore">
+            <view class="weui-loading"></view>
+            <view class="weui-loadmore__tips">正在加载</view>
+          </view>
+        </view>
       </block>
-      <block wx:if="{{tags.length > 0}}">
+      <block wx:if="{{hotTags.length > 0}}">
         <view class="tags">
           <view
             class="tag"
-            wx:for="{{tags}}"
+            wx:for="{{hotTags}}"
             wx:key="index"
             data-value="{{item.chars}}"
             bindtap="bindTagSearch"
@@ -46,10 +51,37 @@
         </view>
       </block>
     </view>
+    <view class="hot">
+      <view class="title">最新收录</view>
+      <block wx:if="{{newTags.length === 0}}">
+        <view class="tips">
+          <view class="weui-loadmore">
+            <view class="weui-loading"></view>
+            <view class="weui-loadmore__tips">正在加载</view>
+          </view>
+        </view>
+      </block>
+      <block wx:if="{{newTags.length > 0}}">
+        <view class="tags">
+          <view
+            class="tag"
+            wx:for="{{newTags}}"
+            wx:key="index"
+            data-value="{{item.chars}}"
+            bindtap="bindTagSearch"
+          >
+            {{item.chars}}
+          </view>
+        </view>
+      </block>
+    </view>
+     <!-- <view class="ads">
+      <view class="motto">“我们目光所及，只是不远的前方，但可以看到，那里有许多工作要做。”——图灵</view>
+    </view>  -->
   </view>
   <view class="page_ft">
     <view class="weui-footer weui-footer_fixed-bottom">
-      <view class="weui-footer__text">© 2017 ruki.pw</view>
+      <view class="weui-footer__text">© 2017 YAwsMe.com</view>
     </view>
   </view>
 </view>
