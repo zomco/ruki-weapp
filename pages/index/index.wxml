@@ -6,9 +6,10 @@
   <view class="page__bd page__bd_spacing">
     <view class="chars">
       <button 
-        class="{{index === charsIndex? 'weui-btn mini-btn button-active': 'weui-btn mini-btn'}}" 
+        class="{{index === charsIndex? 'weui-btn mini-btn active': 'weui-btn mini-btn'}}" 
         type="default" 
-        size="mini" 
+        size="mini"
+        plain="true" 
         wx:for="{{charsArray}}" 
         wx:key="{{index}}"
         data-index="{{index}}"

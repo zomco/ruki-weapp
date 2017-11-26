@@ -22,7 +22,9 @@
  # SOFTWARE.
  */
 
+const wafer = require('../../vendor/wafer-client-sdk/index');
 const QR = require('../../vendor/qrcode/index');
+const config = require('../../config');
 const setCanvasSize = function(boxWidth) {
   var size = {};
   try {
@@ -44,23 +46,32 @@ Page({
       item: []
     },
     onLoad: function(options) {
-      try {
-        const results = wx.getStorageSync('results');
-        if (results) {
-          const result = results.find(function(t) {
-            return t.id === options.id;
-          })
-          this.setData({ item: result });
+      const me = this;
+      wx.showLoading({
+        title: '加载中..',
+      });
+      wafer.request({
+        url: config.service.watchUrl,
+        data: { id: options.id },
+        success: function (res) {
+          wx.hideLoading();
+          me.setData({ item: res.data.result });
+        },
+        fail: function (err) {
+          wx.hideLoading();
+          const { message } = err;
+          wx.showModal({
+            title: '查询失败',
+            content: '网络或系统问题导致加载失败',
+          });
         }
-      } catch (e) {
-        console.error(e);
-      }
+      });
     },
-    onReady: function () {
-      const size = setCanvasSize(100);
-      const { item: { source } } = this.data;
-      QR.qrApi.draw(source, "mycanvas", size.w, size.h);
-    },
+    // onReady: function () {
+    //   const size = setCanvasSize(100);
+    //   const { item: { source } } = this.data;
+    //   QR.qrApi.draw(source, "mycanvas", size.w, size.h);
+    // },
     bindCopyLink: function () {
       const { item: { source } } = this.data;
       wx.setClipboardData({
@@ -73,16 +84,23 @@ Page({
       })
     },
     onShareAppMessage: function (options) {
-      const { item: { title, anprFile, id } } = this.data;
+      const { item: { title, posterFile, id } } = this.data;
       return {
         title: title,
-        path: `/page/detail/detail?id=${id}`,
-        imageUrl: anprFile,
+        path: `/pages/detail/detail?id=${id}`,
+        imageUrl: posterFile,
         success: function (res) {
           // 转发成功
+          wx.showToast({
+            title: '转发成功',
+            icon: 'success'
+          });
         },
         fail: function (res) {
           // 转发失败
+          wx.showToast({
+            title: '转发失败'
+          });
         }
       }
     }

@@ -41,6 +41,10 @@
   margin-top: 15px;
 }
 
+.chars > .active[type="default"] {
+  border-color: #cfcfcf;
+}
+
 .keyboard {
   z-index: 9999;
   position: fixed;
@@ -60,11 +64,6 @@
 
 .keyboard > .weui-btn:first-child {
   margin-top: 15px;
-}
-
-.button-active[type="default"]  {
-  color: rgba(0, 0, 0, 0.6);
-  background-color: #DEDEDE;
 }
 
 .ads {

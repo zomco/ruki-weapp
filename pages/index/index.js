@@ -171,22 +171,29 @@ Page({
     // 点击虚拟键盘，触发车牌字符改变
     bindKeyboardButton: function(e) {
       const { dataset: { value } } = e.target;
-      const { charsArray, charsIndex } = this.data;
+      let { charsArray, charsIndex } = this.data;
       charsArray[charsIndex] = value;
-      this.setData({ charsArray });
+      charsIndex = charsIndex === 6 ? charsIndex : charsIndex + 1;
+      // 模拟点击下一个按键
+      const keyboardArray = this.filterKeyboardButton(charsArray, charsIndex)
+      this.setData({ keyboard: true, keyboardArray, charsIndex, charsArray });
+    },
+    // 过滤虚拟键盘按键，第二位至第七位最多有两位是字母
+    filterKeyboardButton: function(charsArray, index) {
+      let keyboardArray = charsMap[index];
+      if (charsAlphabetCount(charsArray.join('')) === 2
+        && index !== 0 && index !== 1
+        && charsSet.indexOf(charsArray[index]) !== -1
+      ) {
+        keyboardArray = charsSet;
+      }
+      return keyboardArray;
     },
     // 点击车牌字符，触发显示虚拟键盘
     bindKeyboardShow: function(e) {
       const { target: { dataset: { index } } } = e;
       const { charsArray } = this.data;
-      let keyboardArray = charsMap[index];
-      // 第二位至第七位最多有两位是字母
-      if (charsAlphabetCount(charsArray.join('')) === 2
-        && index !== 0 && index !== 1 
-        && charsSet.indexOf(charsArray[index]) !== -1
-      ) {
-        keyboardArray = charsSet;
-      }
+      const keyboardArray = this.filterKeyboardButton(charsArray, index);
       this.setData({ keyboard: true, keyboardArray, charsIndex: index});
     },
     // 点击车牌字符以外的区域，触发隐藏虚拟键盘
@@ -196,4 +203,23 @@ Page({
         this.setData({ keyboard: false, keyboardArray: null, charsIndex: null });
       }
     },
+    onShareAppMessage: function (options) {
+      return {
+        title: '路几小程序',
+        path: '/pages/index/index',
+        success: function (res) {
+          // 转发成功
+          wx.showToast({
+            title: '转发成功',
+            icon: 'success'
+          });
+        },
+        fail: function (res) {
+          // 转发失败
+          wx.showToast({
+            title: '转发失败'
+          });
+        }
+      }
+    }
 });

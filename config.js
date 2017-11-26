@@ -36,6 +36,9 @@ var config = {
         // 查询地址，用于查询车牌
         searchUrl: `${host}/weapp/search`,
 
+        // 详情地址，用于播放详情
+        watchUrl: `${host}/weapp/watch`,
+
         // 展示地址，用于展示标签
         showUrl: `${host}/weapp/show`,
     },
