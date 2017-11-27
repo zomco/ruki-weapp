@@ -1,7 +1,7 @@
-.copy {
+.button {
   margin: 0 auto;
   padding: 15px 0;
-  width: 60%;
+  width: 38.2%;
 }
 
 .item {

@@ -41,6 +41,9 @@ var config = {
 
         // 展示地址，用于展示标签
         showUrl: `${host}/weapp/show`,
+
+        // 随机地址，用于继续看看
+        shuffleUrl: `${host}/weapp/shuffle`,
     },
 
     env: {

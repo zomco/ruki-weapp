@@ -43,25 +43,68 @@ const setCanvasSize = function(boxWidth) {
 
 Page({
     data: {
-      item: []
+      // 实例
+      item: [],
+      // 查询状态
+      loading: false,
     },
+    // 加载页面时获取实例
     onLoad: function(options) {
+      const { id, shuffle } = options;
+      if (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
+        this.bindButtonLoad(id);
+      } else if ( shuffle == 1) {
+        this.bindButtonShuffle();
+      } else {
+        // 无效的参数
+      }
+    },
+    // 点击刷新，执行加载
+    bindButtonLoad: function (id) {
       const me = this;
-      wx.showLoading({
-        title: '加载中..',
-      });
+      wx.showLoading({ title: '加载中..' });
+      me.setData({ loading: true });
       wafer.request({
         url: config.service.watchUrl,
-        data: { id: options.id },
+        data: { id },
         success: function (res) {
           wx.hideLoading();
-          me.setData({ item: res.data.result });
+          me.setData({
+            loading: false,
+            item: res.data.result,
+          });
         },
         fail: function (err) {
           wx.hideLoading();
           const { message } = err;
+          me.setData({ loading: false });
           wx.showModal({
-            title: '查询失败',
+            title: '加载失败',
+            content: '网络或系统问题导致加载失败',
+          });
+        }
+      });
+    },
+    // 点击继续看看，执行查询
+    bindButtonShuffle: function (e) {
+      const me = this;
+      wx.showLoading({ title: '加载中..' });
+      me.setData({ loading: true });
+      wafer.request({
+        url: config.service.shuffleUrl,
+        success: function (res) {
+          wx.hideLoading();
+          me.setData({
+            loading: false,
+            item: res.data.result,
+          }); 
+        },
+        fail: function (err) {
+          wx.hideLoading();
+          me.setData({ loading: false });
+          const { message } = err;
+          wx.showModal({
+            title: '加载失败',
             content: '网络或系统问题导致加载失败',
           });
         }
@@ -72,6 +115,7 @@ Page({
     //   const { item: { source } } = this.data;
     //   QR.qrApi.draw(source, "mycanvas", size.w, size.h);
     // },
+    // 点击复制按钮
     bindCopyLink: function () {
       const { item: { source } } = this.data;
       wx.setClipboardData({
@@ -83,6 +127,7 @@ Page({
         }
       })
     },
+    // 设置转发
     onShareAppMessage: function (options) {
       const { item: { title, posterFile, id } } = this.data;
       return {
@@ -99,7 +144,8 @@ Page({
         fail: function (res) {
           // 转发失败
           wx.showToast({
-            title: '转发失败'
+            title: '转发失败',
+            icon: 'loading'
           });
         }
       }

@@ -19,14 +19,21 @@
       </button>
     </view>
     <button
-      class="weui-btn"
+      class="weui-btn search"
       type="primary"
       bindgetuserinfo="bindButtonSearch"
       disabled="{{loading}}"
       open-type="getUserInfo"
-
     >
       查询
+    </button>
+    <button
+      class="weui-btn pickup"
+      type="default"
+      bindtap="bindButtonPickup"
+      disabled="{{loading}}"
+    >
+      随便看看
     </button>
     <view class="hot">
       <view class="title">热门查询</view>
@@ -51,7 +58,7 @@
           </view>
         </view>
       </block>
-    </view>
+    </view>  
     <view class="hot">
       <view class="title">最新收录</view>
       <block wx:if="{{newTags.length === 0}}">

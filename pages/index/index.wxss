@@ -1,3 +1,12 @@
+/* button.search {
+  background-color: rgb(247, 183, 60);
+  color: rgb(56, 54, 53);
+}
+
+button.pickup {
+  color: rgb(56, 54, 53);
+} */
+
 .hot {
   margin-top: 25rpx;
 }
@@ -11,7 +20,7 @@
   display: flex;
   display: -webkit-flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: space-around;
 }
 
 .hot .tag {
@@ -22,6 +31,7 @@
   background-color: #cfcfcf;
   color: #fff;
   width: 27%;
+  font-size: 30rpx;
 }
 
 .hot .tips {
@@ -35,6 +45,10 @@
 .chars {
   display: -webkit-flex;
   display: flex;
+}
+
+.chars > .weui-btn {
+  padding: 0 35rpx;
 }
 
 .chars > .weui-btn:first-child {

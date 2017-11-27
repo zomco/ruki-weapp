@@ -124,9 +124,7 @@ Page({
     // 执行查询
     bindSearch: function(e) {
       const me = this;
-      wx.showLoading({
-        title: '查询中..',
-      });
+      wx.showLoading({ title: '查询中..' });
       me.setData({ loading: true });
       const chars = this.data.charsArray.join('');
       const location = wx.getStorageSync('location');
@@ -144,9 +142,7 @@ Page({
           try {
             wx.setStorageSync('chars', chars)
             wx.setStorageSync('results', res.data.results);
-            wx.navigateTo({
-              url: `/pages/result/result`,
-            });
+            wx.navigateTo({ url: `/pages/result/result` });
           } catch (e) {
             console.error(e);
           }
@@ -203,6 +199,11 @@ Page({
         this.setData({ keyboard: false, keyboardArray: null, charsIndex: null });
       }
     },
+    // 点击随便看看，执行查询
+    bindButtonPickup: function(e) {
+      wx.navigateTo({ url: `/pages/detail/detail?shuffle=1` });
+    },
+    // 转发页面设置
     onShareAppMessage: function (options) {
       return {
         title: '路几小程序',
@@ -217,7 +218,8 @@ Page({
         fail: function (res) {
           // 转发失败
           wx.showToast({
-            title: '转发失败'
+            title: '转发失败',
+            icon: 'loading'
           });
         }
       }
