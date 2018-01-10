@@ -25,7 +25,7 @@
       disabled="{{loading}}"
       open-type="getUserInfo"
     >
-      查询
+      查询车牌
     </button>
     <button
       class="weui-btn pickup"
@@ -34,6 +34,14 @@
       disabled="{{loading}}"
     >
       随便看看
+    </button>
+    <button
+      class="weui-btn pickup"
+      type="default"
+      bindtap="bindButtonPickup"
+      disabled="{{loading}}"
+    >
+      我要上传
     </button>
     <view class="hot">
       <view class="title">热门查询</view>
@@ -83,9 +91,6 @@
         </view>
       </block>
     </view>
-     <!-- <view class="ads">
-      <view class="motto">“我们目光所及，只是不远的前方，但可以看到，那里有许多工作要做。”——图灵</view>
-    </view>  -->
   </view>
   <view class="page_ft">
     <view class="weui-footer weui-footer_fixed-bottom">

@@ -27,6 +27,8 @@ var host = 'https://www.ruki.pw';
 
 var config = {
   
+    host: host,
+    
     service: {
         host,
 

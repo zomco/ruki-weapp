@@ -24,6 +24,7 @@
 
 const wafer = require('../../vendor/wafer-client-sdk/index');
 const QR = require('../../vendor/qrcode/index');
+const base64 = require('../../vendor/base64/index');
 const config = require('../../config');
 const setCanvasSize = function(boxWidth) {
   var size = {};
@@ -41,6 +42,15 @@ const setCanvasSize = function(boxWidth) {
   return size;
 };
 
+const fromGlobalId = function (globalId) {
+  const unbasedGlobalId = base64.decode(globalId);
+  const delimiterPos = unbasedGlobalId.indexOf(':');
+  return {
+    type: unbasedGlobalId.substring(0, delimiterPos),
+    id: unbasedGlobalId.substring(delimiterPos + 1)
+  };
+}
+
 Page({
     data: {
       // 实例
@@ -50,11 +60,27 @@ Page({
     },
     // 加载页面时获取实例
     onLoad: function(options) {
-      const { id, shuffle } = options;
+      const { id, shuffle, q } = options;
       if (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
+        // 小程序内根据id获取详情
         this.bindButtonLoad(id);
       } else if ( shuffle == 1) {
+        // 随机获取详情
         this.bindButtonShuffle();
+      } else if (q) {
+        // 外部二维码获取详情
+        const shareUrl = decodeURIComponent(q);
+        const regexp = new RegExp('^' + config.host + '/post/((?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)$', 'i');
+        const matches = regexp.exec(shareUrl);
+        if (!matches) {
+          return;
+        }
+        const globalId = matches[1];
+        const globalObj = fromGlobalId(globalId);
+        if (globalObj.type !== 'Post') {
+          return;
+        }
+        this.bindButtonLoad(globalObj.id);
       } else {
         // 无效的参数
       }
