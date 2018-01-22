@@ -1,14 +1,44 @@
 {
     "pages": [
         "pages/index/index",
+        "pages/search/search",
         "pages/result/result",
         "pages/detail/detail"
     ],
     "window": {
-        "backgroundTextStyle": "light",
-        "navigationBarBackgroundColor": "#333",
+        "backgroundColor": "white",
+        "backgroundTextStyle": "dark",
+        "enablePullDownRefresh": false,
+        "navigationBarBackgroundColor": "white",
         "navigationBarTitleText": "路几",
-        "navigationBarTextStyle": "white"
+        "navigationBarTextStyle": "black"
+    },
+    "tabBar": {
+      "color": "black",
+      "selectedColor1": "#607d8b",
+      "selectedColor": "#ffc107",
+      "backgroundColor": "white",
+      "borderStyle": "black",
+      "list": [
+        {
+          "pagePath": "pages/index/index",
+          "text": "动态",
+          "iconPath": "images/home_black.png",
+          "selectedIconPath": "images/home_ruki.png"
+        },
+        {
+          "pagePath": "pages/detail/detail",
+          "text": "上传",
+          "iconPath": "images/add_outline.png",
+          "selectedIconPath": "images/add_ruki.png"
+        },
+        {
+          "pagePath": "pages/result/result",
+          "text": "我的",
+          "iconPath": "images/user_outline.png",
+          "selectedIconPath": "images/user_ruki.png"
+        }
+      ]
     },
     "networkTimeout": {
       "request": 10000,

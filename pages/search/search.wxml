@@ -1,0 +1,115 @@
+<view class="page" bindtap="bindKeyboardHide">
+  <view class="page__hd">
+      <view class="page__title">查询行车记录</view>
+      <view class="page__desc">已收录 {{plateCount}} 个车牌</view>
+  </view>
+  <view class="page__bd page__bd_spacing">
+    <view class="chars">
+      <button 
+        class="{{index === charsIndex? 'weui-btn mini-btn active': 'weui-btn mini-btn'}}" 
+        type="default" 
+        size="mini"
+        plain="true" 
+        wx:for="{{charsArray}}" 
+        wx:key="{{index}}"
+        data-index="{{index}}"
+        bindtap="bindKeyboardShow"
+      >
+        {{item}}
+      </button>
+    </view>
+    <button
+      class="weui-btn search"
+      type="primary"
+      bindgetuserinfo="bindButtonSearch"
+      disabled="{{loading}}"
+      open-type="getUserInfo"
+    >
+      查询车牌
+    </button>
+    <button
+      class="weui-btn pickup"
+      type="default"
+      bindtap="bindButtonPickup"
+      disabled="{{loading}}"
+    >
+      随便看看
+    </button>
+    <button
+      class="weui-btn pickup"
+      type="default"
+      bindtap="bindButtonPickup"
+      disabled="{{loading}}"
+    >
+      我要上传
+    </button>
+    <view class="hot">
+      <view class="title">热门查询</view>
+      <block wx:if="{{hotTags.length === 0}}">
+        <view class="tips">
+          <view class="weui-loadmore">
+            <view class="weui-loading"></view>
+            <view class="weui-loadmore__tips">正在加载</view>
+          </view>
+        </view>
+      </block>
+      <block wx:if="{{hotTags.length > 0}}">
+        <view class="tags">
+          <view
+            class="tag"
+            wx:for="{{hotTags}}"
+            wx:key="index"
+            data-value="{{item.chars}}"
+            bindtap="bindTagSearch"
+          >
+            {{item.chars}}
+          </view>
+        </view>
+      </block>
+    </view>  
+    <view class="hot">
+      <view class="title">最新收录</view>
+      <block wx:if="{{newTags.length === 0}}">
+        <view class="tips">
+          <view class="weui-loadmore">
+            <view class="weui-loading"></view>
+            <view class="weui-loadmore__tips">正在加载</view>
+          </view>
+        </view>
+      </block>
+      <block wx:if="{{newTags.length > 0}}">
+        <view class="tags">
+          <view
+            class="tag"
+            wx:for="{{newTags}}"
+            wx:key="index"
+            data-value="{{item.chars}}"
+            bindtap="bindTagSearch"
+          >
+            {{item.chars}}
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+  <view class="page_ft">
+    <view class="weui-footer weui-footer_fixed-bottom">
+      <view class="weui-footer__text">© 2017 YAwsMe.com</view>
+    </view>
+  </view>
+</view>
+<block wx:if="{{keyboard}}">
+  <view class="keyboard">
+    <button
+      class="{{item === charsArray[charsIndex]? 'weui-btn mini-btn button-active': 'weui-btn mini-btn'}}" 
+      type="default" 
+      size="mini" 
+      wx:for="{{keyboardArray}}" 
+      wx:key="{{index}}"
+      bindtap="bindKeyboardButton"
+      data-value="{{item}}" 
+    >
+      {{item}}
+    </button>
+  </view>
+</block> 
