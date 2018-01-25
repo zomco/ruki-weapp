@@ -10,10 +10,61 @@
                 <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
             </view>
             <view class="weui-tab__panel">
-                <view class="weui-tab__content" hidden="{{activeIndex != 0}}">选项一的内容</view>
-                <view class="weui-tab__content" hidden="{{activeIndex != 1}}">选项二的内容</view>
-                <view class="weui-tab__content" hidden="{{activeIndex != 2}}">选项三的内容</view>
-                <view class="weui-tab__content" hidden="{{activeIndex != 3}}">选项四的内容</view>
+                <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
+                  <view class="item_box" wx:for="{{crashEdges}}" wx:key="{{item.cursor}}">
+                    <view class="item">
+                      <video 
+                        class="video"
+                        src="{{item.node.videoFile}}"
+                        poster="{{item.node.posterFile}}"
+                      />
+                      <view class="title">{{item.node.title}}</view>
+                      <view class="actions">
+                        hello
+                      </view>
+                    </view>
+                  </view>
+                </view>
+                <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
+                  <view class="item_box" wx:for="{{ruleEdges}}" wx:key="{{item.cursor}}">
+                    <view class="item">
+                      <video 
+                        class="video"
+                        src="{{item.node.videoFile}}"
+                        poster="{{item.node.posterFile}}"
+                      />
+                      <view class="title">{{item.node.title}}</view>
+                      <view class="actions">
+                        hello
+                      </view>
+                    </view>
+                  </view>
+                </view>
+                <view class="weui-tab__content" hidden="{{activeIndex != 2}}">
+                  <view class="item_box" wx:for="{{otherEdges}}" wx:key="{{item.cursor}}">
+                    <view class="item">
+                      <video 
+                        class="video"
+                        objectFit="fill"
+                        show-center-play-btn="{{false}}"
+                      >
+                        <cover-view class="controls">
+                          <cover-view class="preload">
+                            <cover-view class="preload__title">
+                              {{item.node.title}}
+                            </cover-view>
+                            <!-- <cover-view class="preload__poster">
+                              <cover-image src="{{item.node.posterFile}}"/>
+                            </cover-view> -->
+                          </cover-view>
+                        </cover-view>
+                      </video>
+                      <view class="actions">
+                        hello
+                      </view>
+                    </view>
+                  </view>
+                </view>
             </view>
         </view>
     </view>

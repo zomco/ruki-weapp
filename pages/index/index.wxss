@@ -7,6 +7,50 @@ page,
     padding-bottom: 0;
 }
 .weui-tab__content{
-    padding-top: 60px;
+    /* padding-top: 60px; */
     text-align: center;
+}
+
+.item {
+  /* position: relative;
+  margin: 5rpx; */
+}
+
+.item > .video {
+  width: 100%;
+}
+
+.item > .title {
+  /* text-align: start;
+  position: absolute;
+  overflow: hidden;
+  top: 10rpx;
+  left: 0;
+  padding: 20rpx;
+  color: white;
+  font-size: 28rpx;
+  max-height: 60rpx; */
+}
+
+.item > actions {
+  /* color: white; */
+}
+
+.controls {
+  width: 100%;
+  height: 100%;
+}
+
+.preload {
+  width: 100%;
+  height: 100%;
+}
+
+.preload__title {
+  overflow: hidden;
+  text-align: start;
+  color: white;
+  padding: 20rpx;
+  font-size: 28rpx;
+  max-height: 60rpx;
 }

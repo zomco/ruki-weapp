@@ -22,8 +22,8 @@
  # SOFTWARE.
  */
 
-var host = 'https://www.ruki.pw';
-// var host = 'http://localhost:3000';
+// var host = 'https://www.ruki.pw';
+var host = 'http://localhost:3000';
 
 var config = {
   
@@ -35,17 +35,15 @@ var config = {
         // 登录地址，用于建立会话
         loginUrl: `${host}/weapp/login`,
 
-        // 查询地址，用于查询车牌
-        searchUrl: `${host}/weapp/search`,
+        // 上传地址，用于上传视频
+        uploadUrl: `${host}/weapp/upload`,
 
-        // 详情地址，用于播放详情
-        watchUrl: `${host}/weapp/watch`,
+        // 视频路径, 视频REST
+        videoUrl: `${host}/weapp/video`,
 
-        // 展示地址，用于展示标签
-        showUrl: `${host}/weapp/show`,
+        // 用户路径，用户REST
+        userUrl: `${host}/weapp/user`,
 
-        // 随机地址，用于继续看看
-        shuffleUrl: `${host}/weapp/shuffle`,
     },
 
     env: {
