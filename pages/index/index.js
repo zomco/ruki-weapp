@@ -38,7 +38,7 @@ Page({
     rulePageInfo: {},
     otherEdges: [],
     otherPageInfo: {},
-    videoPhase: 'preload',
+    videoPhase: null, // load, play, end
     videoId: null,
   },
   // 页码加载时获取slider位置
@@ -130,8 +130,9 @@ Page({
     });
   },
   // 选择tab的时候过滤切换过滤条件
-  tabClick: function (e) {
+  onNavClick: function (e) {
     const that = this;
+    console.log(e.currentTarget);
     that.setData({
       sliderOffset: e.currentTarget.offsetLeft,
       activeIndex: e.currentTarget.id
@@ -148,20 +149,31 @@ Page({
       that.loadVideos(filter);
     }
   },
+  onPosterClick: function (e) {
+    const videoId = e.currentTarget.id;
+    const that = this;
+    this.setData({ videoPhase: 'load', videoId });
+    setTimeout(function () {
+      that.setData({ videoPhase: 'play', videoId });
+      const videoContext = wx.createVideoContext(videoId);
+      videoContext.play();
+    }, 618);
+  },
   // 视频播放开始
   onVideoPlay: function (e) {
-    this.setData({ videoPhase: 'load'})
+    console.log('video play');
+    // this.setData({ videoPhase: 'load'})
   },
   // 视频播放暂停
   onVideoPause: function (e) {
-
+    console.log('video pause');
   },
   // 视频播放结束
   onVideoEnded: function (e) {
-
+    console.log('video end');
   },
   // 视频播放进度变化
   onVideoTimeUpdate: function (e) {
-
+    console.log('video time update');
   }
 });

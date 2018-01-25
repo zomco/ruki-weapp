@@ -1,71 +1,109 @@
 <view class="page">
-    <view class="page__bd">
-        <view class="weui-tab">
-            <view class="weui-navbar">
-                <block wx:for="{{tabs}}" wx:key="*this">
-                    <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
-                        <view class="weui-navbar__title">{{item}}</view>
-                    </view>
-                </block>
-                <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
-            </view>
-            <view class="weui-tab__panel">
-                <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
-                  <view class="item_box" wx:for="{{crashEdges}}" wx:key="{{item.cursor}}">
-                    <view class="item">
-                      <video 
-                        class="video"
-                        src="{{item.node.videoFile}}"
-                        poster="{{item.node.posterFile}}"
-                      />
-                      <view class="title">{{item.node.title}}</view>
-                      <view class="actions">
-                        hello
-                      </view>
-                    </view>
-                  </view>
-                </view>
-                <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
-                  <view class="item_box" wx:for="{{ruleEdges}}" wx:key="{{item.cursor}}">
-                    <view class="item">
-                      <video 
-                        class="video"
-                        src="{{item.node.videoFile}}"
-                        poster="{{item.node.posterFile}}"
-                      />
-                      <view class="title">{{item.node.title}}</view>
-                      <view class="actions">
-                        hello
-                      </view>
-                    </view>
-                  </view>
-                </view>
-                <view class="weui-tab__content" hidden="{{activeIndex != 2}}">
-                  <view class="item_box" wx:for="{{otherEdges}}" wx:key="{{item.cursor}}">
-                    <view class="item">
-                      <video 
-                        class="video"
-                        objectFit="fill"
-                        show-center-play-btn="{{false}}"
-                      >
-                        <cover-view class="controls">
-                          <cover-view class="preload">
-                            <cover-view class="preload__title">
-                              {{item.node.title}}
-                            </cover-view>
-                            <!-- <cover-view class="preload__poster">
-                              <cover-image src="{{item.node.posterFile}}"/>
-                            </cover-view> -->
-                          </cover-view>
-                        </cover-view>
-                      </video>
-                      <view class="actions">
-                        hello
-                      </view>
-                    </view>
-                  </view>
-                </view>
-            </view>
+  <view class="page__bd">
+    <view class="weui-navbar" style="position:static">
+      <block wx:for="{{tabs}}" wx:key="*this">
+        <view 
+          id="{{index}}"
+          class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}"
+          bindtap="onNavClick"
+        >
+          <view class="weui-navbar__title">{{item}}</view>
         </view>
+      </block>
+      <view
+        class="weui-navbar__slider"
+        style="width: 1em; top: 40px; left: {{40+sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);" 
+      />
     </view>
+    <!-- 现场视频 -->
+    <view 
+      class="item_box" 
+      wx:for="{{crashEdges}}" 
+      wx:key="{{item.cursor}}"
+      hidden="{{activeIndex != 0}}"
+    >
+      <view class="item">
+        <video 
+          class="video"
+          src="{{item.node.videoFile}}"
+          poster="{{item.node.posterFile}}"
+        />
+        <view class="title">{{item.node.title}}</view>
+        <view class="actions">
+          hello
+        </view>
+      </view>
+    </view>
+    <!-- 规则视频 -->
+    <view 
+      class="item_box" 
+      wx:for="{{ruleEdges}}" 
+      wx:key="{{item.cursor}}"
+      hidden="{{activeIndex != 1}}"
+    >
+      <view class="item">
+        <video 
+          class="video"
+          src="{{item.node.videoFile}}"
+          poster="{{item.node.posterFile}}"
+        />
+        <view class="title">{{item.node.title}}</view>
+        <view class="actions">
+          hello
+        </view>
+      </view>
+    </view>
+    <!-- 亮点视频 -->
+    <view class="item_box"
+      wx:for="{{otherEdges}}"
+      wx:key="{{item.cursor}}"
+      hidden="{{activeIndex != 2}}"
+    >
+      <view class="item">
+        <view
+          wx:if="{{videoPhase === 'play' && videoId === item.cursor}}"
+          id="{{item.cursor}}"
+          class="player"
+        >
+          <video
+            id="{{item.cursor}}"
+            src="{{item.node.videoFile}}"
+            class="player__video"
+            bindplay="onVideoPlay"
+            bindpause="onVideoPause"
+            bindended="onVideoEnded"
+            bindtimeupdate="onVideoTimeUpdate"
+            show-center-play-btn="{{false}}"
+          />
+        </view>
+        <view
+          wx:elif="{{videoPhase === 'load' && videoId === item.cursor}}"
+          id="{{item.cursor}}"
+          class="loader"
+        >
+          <view class="loader__cover">
+            <view class="loader__spinner"><view class="fa fa-spin fa-spinner fa-2x" /></view>
+          </view>
+          <view class="loader__bg" /> 
+        </view>
+        <view
+          wx:else
+          id="{{item.cursor}}"
+          class="poster"
+          bindtap="onPosterClick"
+        >
+          <view class="poster__cover">
+            <view class="poster__title">{{item.node.title}}</view>
+            <view class="poster__playbtn"><view class="fa fa-play fa-2x" /></view>
+            <view class="poster__duration">{{item.node.duration}}</view>
+          </view>
+          <image class="poster__bg" src="{{item.node.posterFile}}"/>
+          <image class="poster__back" src="../../images/back.png"/>
+        </view>
+        <view class="actions">
+          hello
+        </view>
+      </view>
+    </view>
+  </view>
 </view>
