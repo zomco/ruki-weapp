@@ -23,24 +23,8 @@
  */
 
 const wafer = require('../../vendor/wafer-client-sdk/index');
-const QR = require('../../vendor/qrcode/index');
 const base64 = require('../../vendor/base64/index');
 const config = require('../../config');
-const setCanvasSize = function(boxWidth) {
-  var size = {};
-  try {
-    var res = wx.getSystemInfoSync();
-    var scale = 750 / 686;//不同屏幕下canvas的适配比例；设计稿是750宽
-    var width = boxWidth ? boxWidth / scale: res.windowWidth / scale;
-    var height = width;//canvas画布为正方形
-    size.w = width;
-    size.h = height;
-  } catch (e) {
-    // Do something when catch error
-    console.log("获取设备信息失败" + e);
-  }
-  return size;
-};
 
 const fromGlobalId = function (globalId) {
   const unbasedGlobalId = base64.decode(globalId);
@@ -54,19 +38,18 @@ const fromGlobalId = function (globalId) {
 Page({
     data: {
       // 实例
-      item: [],
+      video: {},
+      videoPhase: null,
       // 查询状态
-      loading: false,
+      isLoading: false,
+      loadingError: null,
     },
     // 加载页面时获取实例
     onLoad: function(options) {
       const { id, shuffle, q } = options;
       if (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
         // 小程序内根据id获取详情
-        this.bindButtonLoad(id);
-      } else if ( shuffle == 1) {
-        // 随机获取详情
-        this.bindButtonShuffle();
+        this.loadVideo(id);
       } else if (q) {
         // 外部二维码获取详情
         const shareUrl = decodeURIComponent(q);
@@ -85,80 +68,60 @@ Page({
         // 无效的参数
       }
     },
-    // 点击刷新，执行加载
-    bindButtonLoad: function (id) {
+    // 加载指定视频
+    loadVideo: function (id) {
       const me = this;
-      wx.showLoading({ title: '加载中..' });
-      me.setData({ loading: true });
+      me.setData({
+        isLoading: true,
+        loadingError: null,
+      });
       wafer.request({
-        url: config.service.watchUrl,
-        data: { id },
+        url: `${config.service.videoUrl}/${id}`,
         success: function (res) {
           wx.hideLoading();
           me.setData({
-            loading: false,
-            item: res.data.result,
+            isLoading: false,
+            video: res.data.node,
           });
         },
         fail: function (err) {
           wx.hideLoading();
           const { message } = err;
-          me.setData({ loading: false });
-          wx.showModal({
-            title: '加载失败',
-            content: '网络或系统问题导致加载失败',
+          me.setData({ 
+            isLoading: false,
+            loadingError: message,
           });
         }
       });
     },
-    // 点击继续看看，执行查询
-    bindButtonShuffle: function (e) {
-      const me = this;
-      wx.showLoading({ title: '加载中..' });
-      me.setData({ loading: true });
-      wafer.request({
-        url: config.service.shuffleUrl,
-        success: function (res) {
-          wx.hideLoading();
-          me.setData({
-            loading: false,
-            item: res.data.result,
-          }); 
-        },
-        fail: function (err) {
-          wx.hideLoading();
-          me.setData({ loading: false });
-          const { message } = err;
-          wx.showModal({
-            title: '加载失败',
-            content: '网络或系统问题导致加载失败',
-          });
-        }
-      });
+    onEnderClick: function (e) {
+      this.setData({ videoPhase: null });
+      const videoContext = wx.createVideoContext('video');
+      videoContext.play();
     },
-    // onReady: function () {
-    //   const size = setCanvasSize(100);
-    //   const { item: { source } } = this.data;
-    //   QR.qrApi.draw(source, "mycanvas", size.w, size.h);
-    // },
-    // 点击复制按钮
-    bindCopyLink: function () {
-      const { item: { source } } = this.data;
-      wx.setClipboardData({
-        data: source,
-        success: function (res) {
-          wx.showToast({
-            title: '复制成功',
-          });
-        }
-      })
+    // 视频播放开始
+    onVideoPlay: function (e) {
+      console.log('video play');
+      // this.setData({ videoPhase: 'load'})
+    },
+    // 视频播放暂停
+    onVideoPause: function (e) {
+      console.log('video pause');
+    },
+    // 视频播放结束
+    onVideoEnded: function (e) {
+      this.setData({ videoPhase: 'end' });
+    },
+    // 视频播放进度变化
+    onVideoTimeUpdate: function (e) {
+      console.log('video time update');
     },
     // 设置转发
     onShareAppMessage: function (options) {
-      const { item: { title, posterFile, id } } = this.data;
+      const { video: { title, posterFile, id } } = this.data;
       return {
         title: title,
-        path: `/pages/detail/detail?id=${id}`,
+        path: `/pages/video/video?id=${id}`,
         imageUrl: posterFile,
         success: function (res) {
           // 转发成功

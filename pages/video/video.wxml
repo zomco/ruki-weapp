@@ -1,0 +1,47 @@
+<view class="page">
+  <view class="page__bd">
+    <view class="video">
+      <view
+        wx:if="{{videoPhase === 'end'}}"
+        class="ender"
+        bindtap="onEnderClick"
+      >
+        <view class="ender__cover">
+          <view class="ender__btn"><view class="fa fa-repeat fa-2x" /></view>
+        </view>
+        <image class="ender__bg" src="{{video.posterFile}}"/>
+      </view>
+      <view
+        wx:else
+        class="player" >
+        <video
+          id="video"
+          src="{{video.videoFile}}"
+          class="player__video"
+          bindplay="onVideoPlay"
+          bindpause="onVideoPause"
+          bindended="onVideoEnded"
+          bindtimeupdate="onVideoTimeUpdate"
+          show-center-play-btn="{{false}}"
+          autoplay
+        />
+      </view>
+      <view class="video__info">
+        <view class="video__title">{{video.title}}</view>
+        <!-- <view class="video__stat">
+          {{`${video.isCrash?'事故现场·':''}${video.isRule?'规则之外·':''}${20}`}}
+        </view> -->
+        <view class="video__actions">
+          <view
+            class="fa fa-heart-o video__action"
+            bindtap="onLikeClick"
+          />
+          <view
+            class="fa fa-share-square-o video__action"
+            bindtap="onShareClick"
+          />
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

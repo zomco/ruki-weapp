@@ -3,12 +3,13 @@
         "pages/index/index",
         "pages/search/search",
         "pages/result/result",
-        "pages/detail/detail"
+        "pages/video/video"
     ],
     "window": {
         "backgroundColor": "white",
         "backgroundTextStyle": "dark",
-        "enablePullDownRefresh": false,
+        "enablePullDownRefresh": true,
+        "onReachBottomDistance": 50,
         "navigationBarBackgroundColor": "white",
         "navigationBarTitleText": "路几",
         "navigationBarTextStyle": "black"
@@ -16,18 +17,24 @@
     "tabBar": {
       "color": "black",
       "selectedColor1": "#607d8b",
-      "selectedColor": "#ffc107",
+      "selectedColor": "#f8b62d",
       "backgroundColor": "white",
       "borderStyle": "black",
       "list": [
         {
           "pagePath": "pages/index/index",
-          "text": "动态",
+          "text": "视频",
           "iconPath": "images/home_black.png",
           "selectedIconPath": "images/home_ruki.png"
         },
         {
-          "pagePath": "pages/detail/detail",
+          "pagePath": "pages/index/index",
+          "text": "车牌",
+          "iconPath": "images/search_black.png",
+          "selectedIconPath": "images/search_ruki.png"
+        },
+        {
+          "pagePath": "pages/result/result",
           "text": "上传",
           "iconPath": "images/add_outline.png",
           "selectedIconPath": "images/add_ruki.png"
