@@ -34,7 +34,7 @@
           "selectedIconPath": "images/add_ruki.png"
         },
         {
-          "pagePath": "pages/result/result",
+          "pagePath": "pages/new/new",
           "text": "我的",
           "iconPath": "images/user_grey.png",
           "selectedIconPath": "images/user_ruki.png"

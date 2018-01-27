@@ -1,54 +1,90 @@
 <view class="page">
   <view class="page__bd">
     <view class="video">
-      <view
-        wx:if="{{videoPhase === 'end'}}"
-        class="ender"
-        bindtap="onEnderClick"
-      >
-        <view class="ender__cover">
-          <view class="ender__btn"><view class="fa fa-repeat fa-2x" /></view>
+      <view class="video__main">
+        <!-- 播放结束时显示重放按钮 -->
+        <view
+          wx:if="{{videoPhase === 'end'}}"
+          class="ender"
+          bindtap="onEnderClick"
+        >
+          <view class="ender__cover">
+            <view class="ender__btn"><view class="fa fa-repeat fa-2x" /></view>
+          </view>
+          <image class="ender__bg" src="{{video.posterFile}}"/>
         </view>
-        <image class="ender__bg" src="{{video.posterFile}}"/>
-      </view>
-      <view
-        wx:else
-        class="player" >
-        <video
-          id="video"
-          src="{{video.videoFile}}"
-          class="player__video"
-          bindplay="onVideoPlay"
-          bindpause="onVideoPause"
-          bindended="onVideoEnded"
-          bindtimeupdate="onVideoTimeUpdate"
-          show-center-play-btn="{{false}}"
-          autoplay
-        />
-      </view>
-      <view class="video__info">
-        <view class="video__title">{{video.title}}</view>
-          <view class="video__tags">
-            <view class="video__tag">{{video.clicks}}次点击</view>
-            <view class="video__tag">{{video.plates[0]}}</view>
-            <view class="video__tag">{{video.isCrash?'事故现场':''}}</view>
-            <view class="video__tag">{{video.isRule?'规则之外':''}}</view>
-          </view> 
-        <view class="video__actions">
-          <view
-            hidden
-            class="fa fa-heart-o video__action"
-            bindtap="onLikeClick"
-          />
-          <view
-            class="fa fa-share-square-o video__action"
-            bindtap="onShareClick"
+        <!-- 播放中使用原生组件 -->
+        <view
+          wx:else
+          class="player" >
+          <video
+            id="video"
+            src="{{video.videoFile}}"
+            class="player__video"
+            bindplay="onVideoPlay"
+            bindpause="onVideoPause"
+            bindended="onVideoEnded"
+            bindtimeupdate="onVideoTimeUpdate"
+            show-center-play-btn="{{false}}"
+            autoplay
           />
         </view>
       </view>
-      <view class="video__comments">
-        <view>评论 {{video.comments.length}}</view>
-        <view>暂没有评论</view>
+      <view class="video__bottom">
+        <view class="video__meta">
+          <view class="video__title">{{video.title}}</view>
+            <view class="video__tags">
+              <view class="video__tag">{{video.when}}</view>
+              <view class="video__tag">·</view>
+              <view class="video__tag">{{video.where}}</view>
+              <view class="video__tag">·</view>
+              <view class="video__tag">{{video.clicks}}</view>
+            </view> 
+          <view class="video__actions">
+            <view
+              hidden
+              class="material-icons video__action"
+              bindtap="onLikeClick"
+            >favorite_border</view>
+            <view
+              class="material-icons video__action"
+              bindtap="onShareClick"
+            >share</view>
+          </view>
+        </view>
+        <view
+          wx:if="{{video.nearbys && video.nearbys.length}}"
+          class="video__nearbys"
+        >
+          <view >附近视频</view>
+          <view
+            wx:for="{{video.nearbys}}"
+            wx:key="{{item.id}}"
+            class="nearbys"
+          >
+            <view
+              class="nearby"
+              data-url="/pages/video/video?id={{item.id}}"
+              bindtap="onNearbyClick"
+            >
+              <view class="nearby__poster">
+                <image class="nearby__poster-cover" src="{{item.poster}}" />
+                <view class="nearby__poster-bg" />
+              </view>
+              <view class="nearby__meta">
+                <view class="nearby__title">{{item.title}}</view>
+                <view class="nearby__distance">{{item.distance}}</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view
+          wx:if="{{video.comment && video.comments.length}}"
+          class="video__comments"
+        >
+          <view>评论</view>
+          <view>暂没有评论</view>
+        </view>
       </view>
     </view>
   </view>

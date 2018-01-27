@@ -114,7 +114,7 @@ Page({
     },
     // 视频播放进度变化
     onVideoTimeUpdate: function (e) {
-      console.log('video time update');
+      // console.log('video time update');
     },
     // 设置转发
     onShareAppMessage: function (options) {
@@ -134,9 +134,24 @@ Page({
           // 转发失败
           wx.showToast({
             title: '转发失败',
-            icon: 'loading'
+            icon: 'none'
           });
         }
       }
+    },
+    // 点击分享按钮提示
+    onShareClick: function () {
+      wx.showToast({
+        title: '点击右上角「...」转发',
+        icon: 'none'
+      })
+    },
+    // 点击附近视频跳转
+    onNearbyClick: function (e) {
+      const videoContext = wx.createVideoContext('video');
+      videoContext.pause();
+      const { url } = e.currentTarget.dataset;
+      console.log(url);
+      wx.navigateTo({ url });
     }
 });

@@ -214,9 +214,4 @@ Page({
   onTrashClick: function (e) {
 
   },
-  // 设置转发
-  onShareAppMessage: function (options) {
-    console.log(options);
-    return {};
-  }
 });
