@@ -3,10 +3,10 @@
         "pages/index/index",
         "pages/search/search",
         "pages/result/result",
-        "pages/video/video"
+        "pages/video/video",
+        "pages/new/new"
     ],
     "window": {
-        "backgroundColor": "white",
         "backgroundTextStyle": "dark",
         "enablePullDownRefresh": true,
         "onReachBottomDistance": 50,
@@ -24,25 +24,19 @@
         {
           "pagePath": "pages/index/index",
           "text": "视频",
-          "iconPath": "images/home_black.png",
+          "iconPath": "images/home_grey.png",
           "selectedIconPath": "images/home_ruki.png"
         },
         {
-          "pagePath": "pages/index/index",
-          "text": "车牌",
-          "iconPath": "images/search_black.png",
-          "selectedIconPath": "images/search_ruki.png"
-        },
-        {
-          "pagePath": "pages/result/result",
+          "pagePath": "pages/new/new",
           "text": "上传",
-          "iconPath": "images/add_outline.png",
+          "iconPath": "images/add_grey.png",
           "selectedIconPath": "images/add_ruki.png"
         },
         {
           "pagePath": "pages/result/result",
           "text": "我的",
-          "iconPath": "images/user_outline.png",
+          "iconPath": "images/user_grey.png",
           "selectedIconPath": "images/user_ruki.png"
         }
       ]

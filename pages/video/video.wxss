@@ -1,14 +1,27 @@
+page {
+  background-color: #252934;
+}
+
+page,
+.page,
+.page__bd{
+  height: 100%;
+}
+.page__bd{
+  padding-bottom: 0;
+}
+
 .video {
 
 }
 
 .video__info {
-  background-color: #3e3a39;
   color: white;
   padding-top: 40rpx;
   padding-bottom: 40rpx;
   padding-left: 20rpx;
   padding-right: 20rpx;
+  border-bottom: 2rpx solid #999999;
 }
 
 .video__actions {
@@ -20,6 +33,26 @@
 .video__action {
   color: #999999;
   margin: 0 20rpx;
+}
+
+.video__tags {
+  display: flex;
+  justify-content: flex-start;
+  padding: 20rpx;
+}
+
+.video__tag {
+  font-size: 20rpx;
+  color: #999999;
+  margin: 0 4rpx;
+}
+
+.video__comments {
+  color: white;
+  padding-top: 40rpx;
+  padding-bottom: 40rpx;
+  padding-left: 20rpx;
+  padding-right: 20rpx;
 }
 
 .player {

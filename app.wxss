@@ -1,8 +1,9 @@
 @import 'style/weui.wxss';
-@import 'style/fontawesome.wxss';
+@import 'style/font-awesome.wxss';
+@import 'style/material-icons.wxss';
 
 page{
-    background-color: white;
+    background-color: white; 
     font-size: 16px;
     font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }

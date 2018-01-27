@@ -72,27 +72,35 @@
         >
           <view class="poster__cover">
             <view class="poster__title">{{item.node.title}}</view>
-            <view class="poster__playbtn"><view class="fa fa-play fa-2x" /></view>
+            <view class="poster__playbtn"><view class="material-icons md-48">play_circle_outline</view></view>
             <view class="poster__duration">{{item.node.duration}}</view>
           </view>
           <image class="poster__bg" src="{{item.node.posterFile}}"/>
         </view>
-        <view class="item__actions">
-          <view
-            hidden
-            class="fa fa-heart-o item__action"
-            bindtap="onLikeClick"
-          />
-          <view
-            class="fa fa-share-square-o item__action"
-            data-url="/pages/video/video?id={{item.node.id}}"
-            bindtap="onShareClick"
-          />
-          <view
-            hidden
-            class="fa fa-trash-o item__action"
-            bindtap="onTrashClick"
-          />
+        <view class="item__footer">
+          <view class="item__actions">
+            <view
+              class="material-icons item__action"
+              data-url="/pages/video/video?id={{item.node.id}}"
+              bindtap="onLikeClick"
+            >comment</view>
+            <view
+              class="material-icons item__action"
+              data-url="/pages/video/video?id={{item.node.id}}"
+              bindtap="onShareClick"
+            >share</view>
+            <view
+              hidden
+              class="fa fa-trash-o item__action"
+              bindtap="onTrashClick"
+            />
+          </view>
+          <view class="item__tags">
+            <view class="item__tag">
+              <image class="item__avatar" src="{{item.node.creator.picture}}" />
+              <view class="item__tagname">{{item.node.creator.displayName}}</view>
+            </view>
+          </view>
         </view>
       </view>
     </view>

@@ -28,11 +28,15 @@
       </view>
       <view class="video__info">
         <view class="video__title">{{video.title}}</view>
-        <!-- <view class="video__stat">
-          {{`${video.isCrash?'事故现场·':''}${video.isRule?'规则之外·':''}${20}`}}
-        </view> -->
+          <view class="video__tags">
+            <view class="video__tag">{{video.clicks}}次点击</view>
+            <view class="video__tag">{{video.plates[0]}}</view>
+            <view class="video__tag">{{video.isCrash?'事故现场':''}}</view>
+            <view class="video__tag">{{video.isRule?'规则之外':''}}</view>
+          </view> 
         <view class="video__actions">
           <view
+            hidden
             class="fa fa-heart-o video__action"
             bindtap="onLikeClick"
           />
@@ -41,6 +45,10 @@
             bindtap="onShareClick"
           />
         </view>
+      </view>
+      <view class="video__comments">
+        <view>评论 {{video.comments.length}}</view>
+        <view>暂没有评论</view>
       </view>
     </view>
   </view>

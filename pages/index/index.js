@@ -200,14 +200,23 @@ Page({
     const { url } = e.currentTarget.dataset;
     wx.navigateTo({ url });
   },
-  // 喜欢按钮
+  // 评论按钮
   onLikeClick: function (e) {
-    wx.navigateTo({
-      url: '/pages/video/video',
-    });
+    const oldVideoId = this.data.videoId;
+    if (oldVideoId) {
+      const oldVideoContext = wx.createVideoContext(oldVideoId);
+      oldVideoContext.pause();
+    }
+    const { url } = e.currentTarget.dataset;
+    wx.navigateTo({ url });
   },
   // 垃圾桶按钮
   onTrashClick: function (e) {
 
+  },
+  // 设置转发
+  onShareAppMessage: function (options) {
+    console.log(options);
+    return {};
   }
 });
