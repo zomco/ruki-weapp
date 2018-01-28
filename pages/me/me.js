@@ -22,19 +22,54 @@
  # SOFTWARE.
  */
 
-const wafer = require('./vendor/wafer-client-sdk/index');
-const config = require('./config');
-
-App({
-    /**
-     * 小程序初始化时执行，我们初始化客户端的登录地址，以支持所有的会话操作
-     */
-    onLaunch() {
-        wafer.setLoginUrl(config.service.loginUrl);
-        // login();
-    },
-    /**
-     * 自动播放全局变量
-     */
-    autoPlay: true,
+Page({
+  data: {
+    cacheSize: '',
+    me: null,
+  },
+  onShow: function () {
+    const that = this;
+    wx.getStorageInfo({
+      success: function(res) {
+        that.setData({ cacheSize: `${res.currentSize} kb` });
+      },
+    });
+  },
+  // 全局自动播放切换
+  onAutoPlayClick: function () {
+    const app = getApp();
+    app.autoPlay = !app.autoPlay;
+  },
+  // 清除缓存
+  onCacheClick: function () {
+    wx.clearStorage();
+    try {
+      const res = wx.getStorageInfoSync();
+      this.setData({ cacheSize: `${res.currentSize} kb` });
+      wx.showToast({
+        title: '清理成功',
+      });
+    } catch (e) {
+      // Do something when catch error
+    }
+  },
+  // 游客登录
+  onGeustClick: function () {
+    const that = this;
+    wx.getUserInfo({
+      success: function (res) {
+        that.setData({ me: res.userInfo });
+        wx.setStorage({
+          key: 'me',
+          data: res.userInfo,
+        });
+      },
+      fail: function (res) {
+        wx.showToast({
+          title: '登录失败',
+          icon: 'none'
+        })
+      }
+    })
+  }
 });

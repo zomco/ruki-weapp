@@ -24,5 +24,18 @@
 
 Page({
   data: {
+    video: null,
+    time: '',
+    date: '',
+  },
+  onDateClick: function (e) {
+    this.setData({
+      date: e.detail.value
+    })
+  },
+  onTimeClick: function (e) {
+    this.setData({
+      time: e.detail.value
+    })
   },
 });

@@ -4,7 +4,8 @@
         "pages/search/search",
         "pages/result/result",
         "pages/video/video",
-        "pages/new/new"
+        "pages/new/new",
+        "pages/me/me"
     ],
     "window": {
         "backgroundTextStyle": "dark",
@@ -34,7 +35,7 @@
           "selectedIconPath": "images/add_ruki.png"
         },
         {
-          "pagePath": "pages/new/new",
+          "pagePath": "pages/me/me",
           "text": "我的",
           "iconPath": "images/user_grey.png",
           "selectedIconPath": "images/user_ruki.png"

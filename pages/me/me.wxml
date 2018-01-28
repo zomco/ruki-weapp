@@ -1,0 +1,31 @@
+<view class="page">
+  <view class="page__bd">
+    <view class="me">
+      <view wx:if="{{me}}" class="profile">
+        <image class="profile__image" src="{{me.avatarUrl}}" />
+        <view class="profile__name">{{me.nickName}}</view>
+      </view>
+      <view wx:else class="profile">
+        <view
+          bindtap="onGeustClick"
+          class="material-icons md-60 profile__avatar"
+        >account_circle</view>
+        <view class="profile__name">游客</view>
+      </view>
+      <view class="settings">
+        <view class="setting">
+          <view class="setting__text">自动播放</view>
+          <switch
+            class="setting__action"
+            color="#f8b62d"
+            bindchange="onAutoPlayClick"
+          />
+        </view>
+        <view class="setting" bindtap="onCacheClick">
+          <view class="setting__text">清除缓存</view>
+          <view lass="setting__tip">{{cacheSize}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
