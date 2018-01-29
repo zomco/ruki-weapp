@@ -22,10 +22,15 @@
  # SOFTWARE.
  */
 
+const { login } = require('../../util');
+
 Page({
   data: {
     cacheSize: '',
     me: null,
+    autoPlay: false,
+    isLoading: false,
+    loadingError: null,
   },
   onShow: function () {
     const that = this;
@@ -34,6 +39,8 @@ Page({
         that.setData({ cacheSize: `${res.currentSize} kb` });
       },
     });
+    const app = getApp();
+    this.setData({ autoPlay: app.autoPlay });
   },
   // 全局自动播放切换
   onAutoPlayClick: function () {
@@ -56,20 +63,12 @@ Page({
   // 游客登录
   onGeustClick: function () {
     const that = this;
-    wx.getUserInfo({
-      success: function (res) {
-        that.setData({ me: res.userInfo });
-        wx.setStorage({
-          key: 'me',
-          data: res.userInfo,
-        });
-      },
-      fail: function (res) {
-        wx.showToast({
-          title: '登录失败',
-          icon: 'none'
-        })
-      }
-    })
+    login(function (res) {
+      that.setData({ me: res });
+      wx.setStorage({
+        key: 'me',
+        data: res,
+      });
+    });
   }
 });

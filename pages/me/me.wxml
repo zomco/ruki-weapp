@@ -16,6 +16,7 @@
         <view class="setting">
           <view class="setting__text">自动播放</view>
           <switch
+            checked="{{autoPlay}}"
             class="setting__action"
             color="#f8b62d"
             bindchange="onAutoPlayClick"
