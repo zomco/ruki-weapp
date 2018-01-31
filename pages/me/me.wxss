@@ -37,6 +37,27 @@ page,
 
 }
 
+.videos {
+  margin-top: 30rpx;
+  margin-bottom: 30rpx;
+  background-color: white;
+}
+
+.video {
+  padding: 20rpx;
+  display: flex;
+  justify-content: space-between;
+}
+
+.video:not(first-child) {
+  border-top: 1rpx solid #ebebed;
+}
+
+.video__action {
+  color: #d9d9d9;
+}
+
+
 .settings {
   margin-top: 30rpx;
   margin-bottom: 30rpx;

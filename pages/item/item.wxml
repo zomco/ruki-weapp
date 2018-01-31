@@ -1,0 +1,58 @@
+<view class="page">
+  <view class="page__bd">
+    <view class="new">
+      <form bindsubmit="onFormSubmit" bindreset="onFormReset">
+        <view class="weui-cells__title">视频信息</view>
+        <view class="weui-cells weui-cells_after-title">
+          <view class="weui-cell">
+            <view class="weui-cell__bd">
+              <view class="weui-uploader">
+                <view class="weui-uploader__hd">
+                  <view class="weui-uploader__title">视频</view>
+                </view>
+                <view class="weui-uploader__bd">
+                  <!-- 默认显示上传组件 -->
+                  <view 
+                    class="aspect"
+                  >
+                    <video
+                      src="{{videoFile}}"
+                      class="success__bg"
+                    />
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="weui-cells__title">标题</view>
+        <view class="weui-cells weui-cells_after-title">
+          <view class="weui-cell">
+            <view class="weui-cell__bd">
+              <textarea 
+                class="weui-textarea" 
+                placeholder="{{video.title}}" 
+                style="height: 3.3em"
+                value="{{title}}"
+                maxlength="200"
+                bindinput="onTitleChange"
+              />
+              <view class="weui-textarea-counter">{{title.length}}/200</view>
+            </view>
+          </view>
+        </view>
+        <view 
+          class="weui-btn-area"
+          hidden="{{!title || title === video.title}}"
+        >
+          <button
+            disabled="{{!title || title === video.title || isSubmiting}}"
+            class="weui-btn new__button" 
+            type="primary" 
+            form-type="submit"
+          >更新视频</button>
+        </view> 
+      </form>
+    </view>
+  </view>
+</view>

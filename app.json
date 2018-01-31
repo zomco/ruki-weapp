@@ -1,11 +1,11 @@
 {
     "pages": [
         "pages/index/index",
-        "pages/search/search",
-        "pages/result/result",
         "pages/video/video",
         "pages/new/new",
-        "pages/me/me"
+        "pages/me/me",
+        "pages/item/item",
+        "pages/terms/terms"
     ],
     "window": {
         "backgroundTextStyle": "dark",

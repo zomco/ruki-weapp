@@ -29,18 +29,36 @@ Page({
     cacheSize: '',
     me: null,
     autoPlay: false,
+    histories: [],
+    items: [],
     isLoading: false,
     loadingError: null,
   },
   onShow: function () {
-    const that = this;
-    wx.getStorageInfo({
-      success: function(res) {
-        that.setData({ cacheSize: `${res.currentSize} kb` });
-      },
-    });
-    const app = getApp();
-    this.setData({ autoPlay: app.autoPlay });
+    try {
+      const that = this;
+      // 缓存大小
+      const { currentSize } = wx.getStorageInfoSync();
+      that.setData({ cacheSize: `${currentSize} kb` });
+      // 全局变量自动播放
+      const app = getApp();
+      this.setData({ autoPlay: app.autoPlay });
+      // 获取用户信息
+      const me = wx.getStorageSync('me');
+      if (me) {
+        // this.setData({ isLoading: true });
+        // 获取历史观看
+
+        // 获取管理视频
+        this.setData({ me });
+      } else {
+        // 获取历史观看
+        const histories = wx.getStorageSync('histories');
+        that.setData({ me, histories });
+      }
+    } catch (e) {
+      console.error(e);
+    }
   },
   // 全局自动播放切换
   onAutoPlayClick: function () {

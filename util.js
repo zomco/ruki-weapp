@@ -80,6 +80,41 @@ const login = function (cb) {
       });
     }
   });
-}
+};
 
-module.exports = { login };
+// 用户选择位置权限交互
+const chooseLocation = function (cb) {
+  wx.chooseLocation({
+    success: function (res1) {
+      cb(res1);
+    },
+    fail: function (res1) {
+      if (res1.errMsg === "chooseLocation:fail auth deny") {
+        wx.openSetting({
+          success: function (res2) {
+            if (res2.authSetting['scope.userLocation']) {
+              wx.chooseLocation({
+                success: function (res3) {
+                  cb(res3);
+                }
+              });
+            } else {
+              wx.showToast({
+                title: '授予权限出问题了，选择地点失败',
+                icon: 'none'
+              });
+            }
+          },
+          fail: function () {
+            wx.showToast({
+              title: '打开权限问题了，选择地点失败',
+              icon: 'none'
+            });
+          }
+        });
+      }
+    }
+  })
+};
+
+module.exports = { login, chooseLocation };

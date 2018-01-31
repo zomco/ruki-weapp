@@ -29,18 +29,26 @@ const {
   WX_HEADER_SKEY, 
 } = require('../../vendor/wafer-client-sdk/lib/constants.js');
 const config = require('../../config');
-const { login } = require('../../util');
+const { login, chooseLocation } = require('../../util');
 
 Page({
   data: {
+    // 视频文件
     videoFile: null,
     videoThumb: null,
     videoPhase: '',
-    videoProgress: '',
+    videoProgress: 0,
+    videoRaw: null,
+    // 时间日期
     time: '',
     date: '',
-    coords: [],
+    // 地理位置
+    latitude: 0,
+    longitude: 0,
+    location: '',
+    // 标题
     title: '',
+    // 条款同意
     isAgree: false,
     isSubmiting: false,
     submitingError: null,
@@ -56,15 +64,10 @@ Page({
         const {
           tempFilePath,
           thumbTempFilePath,
-          size,
-          height,
-          width,
-          duration,
         } = res;
         that.setData({
           videoFile: tempFilePath,
           videoThumb: thumbTempFilePath,
-          videoPhase: 'load',
         });
         // 自动执行上传
         that.onUploadClick();
@@ -88,6 +91,7 @@ Page({
     const { videoFile } = this.data;
     const that = this;
     login(function (res) {
+      that.setData({ videoPhase: 'load' });
       // 模拟wafer从storage获取skey和id
       wx.getStorage({
         key: 'weapp_session_' + WX_SESSION_MAGIC_ID,
@@ -102,8 +106,13 @@ Page({
             name: 'file',
             header: authHeader,
             success: function (res) {
-              const data = res.data
-              that.setData({ videoPhase: 'success' });
+              const { raw, meta } = JSON.parse(res.data);
+              that.setData({ 
+                videoPhase: 'success',
+                videoRaw: raw,
+                date: meta.date,
+                time: meta.time,
+              });
             },
             fail: function (res) {
               that.setDat({ videoPhase: 'fail' });
@@ -131,8 +140,15 @@ Page({
     });
   },
   // 位置发生变化
-  onCoordsClick: function (e) {
-
+  onLocationClick: function (e) {
+    const that = this;
+    chooseLocation(function (res) {
+      that.setData({
+        latitude: res.latitude,
+        longitude: res.longitude,
+        location: res.address,
+      });
+    });
   },
   // 标题发生变化
   onTitleChange: function (e) {
@@ -149,7 +165,66 @@ Page({
   },
   // 提交表单
   onFormSubmit: function (e) {
-
+    const that = this;
+    const {
+      videoRaw,
+      date,
+      time,
+      longitude,
+      latitude,
+      title,
+    } = that.data;
+    that.setData({
+      isSubmiting: true,
+      submitingError: null,
+    });
+    wafer.request({
+      method: 'POST',
+      data: {
+        raw: videoRaw,
+        date,
+        time,
+        lng: longitude,
+        lat: latitude,
+        title,
+      },
+      url: config.service.videoUrl,
+      success: function (res) {
+        if (res.statusCode === '200') {
+          const { id } = res.data;
+          that.setData({
+            isSubmiting: false,
+            submitingError: null,
+          });
+          wx.showToast({
+            title: '发布成功，立即前往视频页面',
+          });
+          that.onFormReset();
+          wx.navigateTo({
+            url: `/pages/item/item?id=${id}`,
+          });
+        } else {
+          that.setData({
+            isSubmiting: false,
+            submitingError: '系统问题',
+          });
+          wx.showToast({
+            title: '系统问题，发布视频失败',
+            icon: 'none',
+          });
+        }
+      },
+      fail: function (res) {
+        that.setData({ 
+          isSubmiting: false,
+          submitingError: '网络问题',
+        });
+        wx.showToast({
+          title: '网络问题，发布视频失败',
+          icon: 'none',
+        });
+      }
+    });
   },
   // 重置表单
   onFormReset: function (e) {
@@ -157,10 +232,13 @@ Page({
       videoFile: null,
       videoThumb: null,
       videoPhase: '',
-      videoProgress: '',
+      videoProgress: 0,
+      videoRaw: null,
       time: '',
       date: '',
-      coords: [],
+      latitude: 0,
+      longitude: 0,
+      location: '',
       title: '',
       isAgree: false,
     })

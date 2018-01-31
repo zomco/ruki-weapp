@@ -12,6 +12,20 @@
         >account_circle</view>
         <view class="profile__name">游客</view>
       </view>
+      <view class="videos">
+        <view class="video">
+          <view class="video__text">观看历史</view>
+          <view class="video__action">
+            <view class="material-icons">chevron_right</view>
+          </view>
+        </view>
+        <view class="video">
+          <view class="video__text">我的视频</view>
+          <view class="video__action">
+            <view class="material-icons">chevron_right</view>
+          </view>
+        </view>
+      </view>
       <view class="settings">
         <view class="setting">
           <view class="setting__text">自动播放</view>

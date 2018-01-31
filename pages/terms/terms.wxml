@@ -1,0 +1,8 @@
+<import src="../../vendor/wemark/wemark.wxml" />
+<view class="page">
+  <view class="page__bd">
+    <view class="terms">
+      <template is="wemark" data="{{...terms}}"></template>
+    </view>
+  </view>
+</view>
