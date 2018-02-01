@@ -99,9 +99,10 @@ Page({
       submitingError: null,
     });
     wafer.request({
+      login: true,
       method: 'PUT',
       data: { title },
-      url: `$(config.service.videoUrl)/${video.id}`,
+      url: `${config.service.videoUrl}/${video.id}`,
       success: function (res) {
         if (res.statusCode === '200') {
           const { id } = res.data;

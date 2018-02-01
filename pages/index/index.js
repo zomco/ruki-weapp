@@ -103,14 +103,15 @@ Page({
         data: { ...args, filter },
         success: function (res) {
           const {
-          edges: newEdges,
+            edges: newEdges,
             pageInfo: {
-            hasNextPage,
+              hasNextPage,
               hasPreviousPage
-          }
-        } = res.data.connection;
+            }
+          } = res.data.connection;
           that.setData({
             isLoading: false,
+            loadingError: null,
             videoEdges: [...edges, ...newEdges],
             videoPageInfo: { hasNextPage, hasPreviousPage }
           });

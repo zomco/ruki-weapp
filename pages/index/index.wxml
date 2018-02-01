@@ -24,12 +24,12 @@
       <view class="fa fa-spinner fa-spin fa-2x" />
     </view>
     <!-- 数据列表 -->
-    <view
-      class="edges"
-      wx:for="{{videoEdges}}"
-      wx:key="{{item.cursor}}"
-    >
-      <view class="item">
+    <view class="edges">
+      <view
+        wx:for="{{videoEdges}}"
+        wx:key="{{item.cursor}}"
+        class="item"
+      >
         <!-- 播放结束时显示重放按钮 -->
         <view
           wx:if="{{videoPhase === 'end' && videoId === item.cursor}}"

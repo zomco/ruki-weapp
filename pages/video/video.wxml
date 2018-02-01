@@ -57,12 +57,10 @@
           class="video__nearbys"
         >
           <view >附近视频</view>
-          <view
-            wx:for="{{video.nearbys}}"
-            wx:key="{{item.id}}"
-            class="nearbys"
-          >
+          <view class="nearbys">
             <view
+              wx:for="{{video.nearbys}}"
+              wx:key="{{item.id}}"
               class="nearby"
               data-url="/pages/video/video?id={{item.id}}"
               bindtap="onNearbyClick"

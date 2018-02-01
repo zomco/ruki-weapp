@@ -16,7 +16,7 @@
                     class="aspect"
                   >
                     <video
-                      src="{{videoFile}}"
+                      src="{{video.videoFile}}"
                       class="success__bg"
                     />
                   </view>
@@ -37,7 +37,7 @@
                 maxlength="200"
                 bindinput="onTitleChange"
               />
-              <view class="weui-textarea-counter">{{title.length}}/200</view>
+              <view class="weui-textarea-counter">{{video.title.length}}/200</view>
             </view>
           </view>
         </view>

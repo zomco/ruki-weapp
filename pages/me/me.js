@@ -23,14 +23,16 @@
  */
 
 const { login } = require('../../util');
+const wafer = require('../../vendor/wafer-client-sdk/index');
+const config = require('../../config');
 
 Page({
   data: {
     cacheSize: '',
     me: null,
     autoPlay: false,
-    histories: [],
-    items: [],
+    historyEdges: [],
+    itemEdges: [],
     isLoading: false,
     loadingError: null,
   },
@@ -46,19 +48,62 @@ Page({
       // 获取用户信息
       const me = wx.getStorageSync('me');
       if (me) {
-        // this.setData({ isLoading: true });
+        this.setData({
+          me,
+          isLoading: true,
+          loadingError: null,
+        });
         // 获取历史观看
 
         // 获取管理视频
-        this.setData({ me });
+        that.loadItems();
       } else {
         // 获取历史观看
-        const histories = wx.getStorageSync('histories');
-        that.setData({ me, histories });
+        const historyEdges = wx.getStorageSync('historyEdges');
+        that.setData({ me, historyEdges });
       }
     } catch (e) {
       console.error(e);
     }
+  },
+  loadItems: function () {
+    const that = this;
+    wafer.request({
+      login: true,
+      data: { first: 10, filter: '-1' },
+      url: config.service.videoUrl,
+      success: function (res) {
+        if (res.statusCode == '200') {
+          const { 
+            edges: newEdges,
+          } = res.data.connection;
+          that.setData({
+            isLoading: false,
+            loadingError: null,
+            itemEdges: newEdges,
+          });
+        } else {
+          that.setData({
+            isLoading: false,
+            loadingError: '系统问题',
+          });
+          wx.showToast({
+            title: '系统问题，加载视频失败',
+            icon: 'none',
+          });
+        }
+      },
+      fail: function (res) {
+        that.setData({
+          isLoading: false,
+          loadingError: '网络问题',
+        });
+        wx.showToast({
+          title: '网络问题，加载视频失败',
+          icon: 'none',
+        });
+      }
+    });
   },
   // 全局自动播放切换
   onAutoPlayClick: function () {

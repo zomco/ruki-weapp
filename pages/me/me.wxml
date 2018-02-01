@@ -14,16 +14,46 @@
       </view>
       <view class="videos">
         <view class="video">
-          <view class="video__text">观看历史</view>
-          <view class="video__action">
-            <view class="material-icons">chevron_right</view>
+          <view class="video__header">
+            <view class="video__text">观看历史</view>
+            <view class="video__action">
+              <view class="material-icons">chevron_right</view>
+            </view>
           </view>
+          <scroll-view scroll-x="{{true}}" class="video__body">
+            <navigator
+              url="/pages/video/video?id={{item.node.id}}"
+              wx:for="{{historyEdges}}"
+              wx:key="{{item.cursor}}"
+              class="video__content"
+            >
+              <view class="video__aspect">
+                <image class="video__poster" src="{{item.node.posterFile}}" />
+              </view>
+              <view class="video__title">{{item.node.title}}</view>
+            </navigator>
+          </scroll-view>
         </view>
         <view class="video">
-          <view class="video__text">我的视频</view>
-          <view class="video__action">
-            <view class="material-icons">chevron_right</view>
+          <view class="video__header">
+            <view class="video__text">我的视频</view>
+            <view class="video__action">
+              <view class="material-icons">chevron_right</view>
+            </view>
           </view>
+          <scroll-view scroll-x="{{true}}" class="video__body">
+            <navigator
+              url="/pages/item/item?id={{item.node.id}}"
+              wx:for="{{itemEdges}}"
+              wx:key="{{item.cursor}}"
+              class="video__content"
+            >
+              <view class="video__aspect">
+                <image class="video__poster" src="{{item.node.posterFile}}" />
+              </view>
+              <view class="video__title">{{item.node.title}}</view>
+            </navigator>
+          </scroll-view>
         </view>
       </view>
       <view class="settings">
