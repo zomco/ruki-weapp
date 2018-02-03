@@ -4,7 +4,6 @@
         "pages/video/video",
         "pages/new/new",
         "pages/me/me",
-        "pages/item/item",
         "pages/terms/terms"
     ],
     "window": {

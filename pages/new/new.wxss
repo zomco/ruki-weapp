@@ -11,7 +11,7 @@ page,
     padding-bottom: 0;
 }
 
-.new__button {
+.main__button {
   background-color: #f8b62d!important;
 }
 
@@ -108,4 +108,15 @@ page,
 
 .location {
   overflow: hidden;
+}
+
+.title {
+  overflow: hidden;
+}
+
+.popup {
+  background-color:#fff;
+  line-height:1.41176471;
+  font-size:17px;
+  padding:10px 15px;
 }

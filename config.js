@@ -44,6 +44,8 @@ var config = {
         // 用户路径，用户REST
         userUrl: `${host}/weapp/user`,
 
+        // 浏览路径，浏览REST
+        viewUrl: `${host}/weapp/view`,
     },
 
     env: {

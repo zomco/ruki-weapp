@@ -43,7 +43,7 @@
           </view>
           <scroll-view scroll-x="{{true}}" class="video__body">
             <navigator
-              url="/pages/item/item?id={{item.node.id}}"
+              url="/pages/video/video?id={{item.node.id}}"
               wx:for="{{itemEdges}}"
               wx:key="{{item.cursor}}"
               class="video__content"

@@ -52,6 +52,23 @@ Page({
     isAgree: false,
     isSubmiting: false,
     submitingError: null,
+    // 标题编辑
+    isPopup: false,
+    isPopupFocus: false,
+  },
+  onShow: function () {
+    // 获取用户信息
+    try {
+      const me = wx.getStorageSync('me');
+      this.setData({ me });
+    } catch (e) {
+      console.error(e);
+    }
+    // 关闭标题编辑
+    this.setData({
+      isPopup: false,
+      isPopupFocus: false,
+    });
   },
   // 选择视频上传
   onChooseClick: function (e) {
@@ -155,6 +172,20 @@ Page({
     this.setData({
       title: e.detail.value
     });
+  },
+  // 点击标题弹出标题编辑
+  onPopupShow: function (e) {
+    this.setData({
+      isPopup: true,
+      isPopupFocus: true,
+    });
+  },
+  // 点击完成隐藏标题编辑
+  onPopupHide: function (e) {
+    this.setData({
+      isPopup: false,
+      isPopupFocus: false,
+    })
   },
   // 条款同意时发生变化
   onIsAgreeClick: function (e) {

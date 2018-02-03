@@ -35,6 +35,15 @@ page,
   border-bottom: 1rpx solid #393d48;
 }
 
+.video__title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.video__edit {
+  color: #999999;
+}
+
 .video__actions {
   display: flex;
   justify-content: flex-end;

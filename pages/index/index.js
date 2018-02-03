@@ -37,7 +37,9 @@ Page({
     videoEdges: [],
     videoPageInfo: {},
     videoPhase: null,
-    videoId: null,
+    videoCursor: null,
+    videoTime: 0,
+    me: null,
   },
   // 页码加载时获取slider位置
   onLoad: function () {
@@ -52,12 +54,20 @@ Page({
       }
     });
   },
-  // 页面显示时加载暂停播放的视频
+
   onShow: function () {
-    const oldVideoId = this.data.videoId;
-    if (oldVideoId) {
-      const oldVideoContext = wx.createVideoContext(oldVideoId);
+    // 页面显示时加载暂停播放的视频
+    const { videoCursor: oldVideoCursor } = this.data;
+    if (oldVideoCursor) {
+      const oldVideoContext = wx.createVideoContext(oldVideoCursor);
       oldVideoContext.play();
+    }
+    try {
+      // 获取用户信息
+      const me = wx.getStorageSync('me');
+      this.setData({ me });
+    } catch (e) {
+      console.error(e);
     }
   },
   // 页码拖到顶部时刷新
@@ -67,7 +77,8 @@ Page({
       videoEdges: [],
       videoPageInfo: {},
       videoPhase: null,
-      videoId: null,
+      videoCursor: null,
+      videoId: null
     });
     this.loadVideos(filter).then(function(){
       wx.stopPullDownRefresh();
@@ -138,6 +149,7 @@ Page({
       videoEdges: [],
       videoPageInfo: {},
       videoPhase: null,
+      videoCursor: null,
       videoId: null,
     });
     // 初次加载数据
@@ -145,57 +157,134 @@ Page({
   },
   // 点击视频封面进行播放，同时暂停其他视频播放
   onPosterClick: function (e) {
-    const videoId = e.currentTarget.id;
-    const oldVideoId = this.data.videoId;
-    if (oldVideoId) {
-      const oldVideoContext = wx.createVideoContext(oldVideoId);
+    const {
+      id: videoCursor,
+      dataset: { id: videoId },
+    } = e.currentTarget;
+    // 先暂停其他播放中的视频
+    const { videoCursor: oldVideoCursor } = this.data;
+    if (oldVideoCursor) {
+      const oldVideoContext = wx.createVideoContext(oldVideoCursor);
       oldVideoContext.pause();
     }
-    this.setData({ videoPhase: 'load', videoId });
+    this.setData({
+      videoPhase: 'load',
+      videoCursor,
+      videoId,
+    });
+    // 模拟缓冲
     const that = this;
     setTimeout(function () {
-      that.setData({ videoPhase: 'play', videoId });
-      const videoContext = wx.createVideoContext(videoId);
+      that.setData({
+        videoPhase: 'play',
+        videoCursor,
+        videoId,
+      });
+      const videoContext = wx.createVideoContext(videoCursor);
       videoContext.play();
     }, 618);
   },
   // 点击视频封底进行重播，同时暂停其他视频播放
   onEnderClick: function (e) {
-    const videoId = e.currentTarget.id;
-    const oldVideoId = this.data.videoId;
-    if (oldVideoId) {
-      const oldVideoContext = wx.createVideoContext(oldVideoId);
+    const {
+      id: videoCursor,
+      dataset: { id: videoId },
+    } = e.currentTarget;
+    const { videoCursor: oldVideoCursor } = this.data;
+    if (oldVideoCursor) {
+      const oldVideoContext = wx.createVideoContext(oldVideoCursor);
       oldVideoContext.pause();
     }
     const that = this;
-    this.setData({ videoPhase: 'play', videoId });
-    const videoContext = wx.createVideoContext(videoId);
+    this.setData({
+      videoPhase: 'play',
+      videoCursor,
+      videoId,
+    });
+    const videoContext = wx.createVideoContext(videoCursor);
     videoContext.play();
   },
   // 视频播放开始
   onVideoPlay: function (e) {
-    console.log('video play');
-    // this.setData({ videoPhase: 'load'})
+    const {
+      videoId,
+      videoTime: time,
+      me,
+    } = this.data;
+    if (me) {
+      // 登录用户直接更新行为
+      wafer.request({
+        method: 'POST',
+        data: {
+          action: 'play',
+          time,
+          videoId,
+        },
+        url: config.service.viewUrl,
+      });
+    } else {
+      // 非登录用户写到本地缓存里
+
+    }
   },
   // 视频播放暂停
   onVideoPause: function (e) {
-    console.log('video pause');
+    const {
+      videoId,
+      videoTime: time,
+      me,
+    } = this.data;
+    if (me) {
+      // 登录用户直接更新行为
+      wafer.request({
+        method: 'POST',
+        data: {
+          action: 'pause',
+          time,
+          videoId,
+        },
+        url: config.service.viewUrl,
+      });
+    } else {
+      // 非登录用户写到本地缓存里
+
+    }
   },
   // 视频播放结束
   onVideoEnded: function (e) {
-    const videoId = e.currentTarget.id;
-    const that = this;
-    this.setData({ videoPhase: 'end', videoId });
+    const { id: videoCursor } = e.currentTarget;
+    this.setData({ videoPhase: 'end', videoCursor });
+    const {
+      videoId,
+      videoTime: time,
+      me,
+    } = this.data;
+    if (me) {
+      // 登录用户直接更新行为
+      wafer.request({
+        method: 'POST',
+        data: {
+          action: 'end',
+          time,
+          videoId,
+        },
+        url: config.service.viewUrl,
+      });
+    } else {
+      // 非登录用户写到本地缓存里
+
+    }
   },
   // 视频播放进度变化
   onVideoTimeUpdate: function (e) {
-    // console.log('video time update');
+    const { currentTime } = e.detail;
+    this.setData({ videoTime: currentTime });
   },
   // 转发按钮，先暂停其他视频播放，再进入详情页码
   onShareClick: function (e) {
-    const oldVideoId = this.data.videoId;
-    if (oldVideoId) {
-      const oldVideoContext = wx.createVideoContext(oldVideoId);
+    const { videoCursor: oldVideoCursor } = this.data;
+    if (oldVideoCursor) {
+      const oldVideoContext = wx.createVideoContext(oldVideoCursor);
       oldVideoContext.pause();
     }
     const { url } = e.currentTarget.dataset;
@@ -203,16 +292,12 @@ Page({
   },
   // 评论按钮
   onLikeClick: function (e) {
-    const oldVideoId = this.data.videoId;
-    if (oldVideoId) {
-      const oldVideoContext = wx.createVideoContext(oldVideoId);
+    const { videoCursor: oldVideoCursor } = this.data;
+    if (oldVideoCursor) {
+      const oldVideoContext = wx.createVideoContext(oldVideoCursor);
       oldVideoContext.pause();
     }
     const { url } = e.currentTarget.dataset;
     wx.navigateTo({ url });
-  },
-  // 垃圾桶按钮
-  onTrashClick: function (e) {
-
   },
 });

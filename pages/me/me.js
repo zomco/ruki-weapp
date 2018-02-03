@@ -54,7 +54,7 @@ Page({
           loadingError: null,
         });
         // 获取历史观看
-
+        that.loadHistories();
         // 获取管理视频
         that.loadItems();
       } else {
@@ -65,6 +65,45 @@ Page({
     } catch (e) {
       console.error(e);
     }
+  },
+  loadHistories: function () {
+    const that = this;
+    wafer.request({
+      login: true,
+      data: { first: 10, filter: '-2' },
+      url: config.service.videoUrl,
+      success: function (res) {
+        if (res.statusCode == '200') {
+          const {
+            edges: newEdges,
+          } = res.data.connection;
+          that.setData({
+            isLoading: false,
+            loadingError: null,
+            historyEdges: newEdges,
+          });
+        } else {
+          that.setData({
+            isLoading: false,
+            loadingError: '系统问题',
+          });
+          wx.showToast({
+            title: '系统问题，加载视频失败',
+            icon: 'none',
+          });
+        }
+      },
+      fail: function (res) {
+        that.setData({
+          isLoading: false,
+          loadingError: '网络问题',
+        });
+        wx.showToast({
+          title: '网络问题，加载视频失败',
+          icon: 'none',
+        });
+      }
+    });
   },
   loadItems: function () {
     const that = this;

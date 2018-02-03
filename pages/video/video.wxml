@@ -9,7 +9,9 @@
           bindtap="onEnderClick"
         >
           <view class="ender__cover">
-            <view class="ender__btn"><view class="fa fa-repeat fa-2x" /></view>
+            <view class="ender__btn">
+              <view class="material-icons md-48">repeat</view>
+            </view>
           </view>
           <image class="ender__bg" src="{{video.posterFile}}"/>
         </view>
@@ -32,14 +34,21 @@
       </view>
       <view class="video__bottom">
         <view class="video__meta">
-          <view class="video__title">{{video.title}}</view>
-            <view class="video__tags">
-              <view class="video__tag">{{video.when}}</view>
-              <view class="video__tag">·</view>
-              <view class="video__tag">{{video.where}}</view>
-              <view class="video__tag">·</view>
-              <view class="video__tag">{{video.clicks}}</view>
-            </view> 
+          <view class="video__title">
+            <view>{{video.title}}</view>
+            <view
+              hidden
+              class="material-icons video__edit"
+              bindtap="onEditClick"
+            >mode_edit</view>
+          </view>
+          <view class="video__tags">
+            <view class="video__tag">{{video.when}}</view>
+            <view class="video__tag">{{video?'·':''}}</view>
+            <view class="video__tag">{{video.where}}</view>
+            <view class="video__tag">{{video?'·':''}}</view>
+            <view class="video__tag">{{video.clicks}}</view>
+          </view> 
           <view class="video__actions">
             <view
               hidden

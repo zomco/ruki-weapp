@@ -38,11 +38,21 @@ const fromGlobalId = function (globalId) {
 Page({
     data: {
       // 实例
-      video: {},
+      video: null,
       videoPhase: null,
       // 查询状态
       isLoading: false,
       loadingError: null,
+      me: null,
+    },
+    onShow: function () {
+      // 获取用户信息
+      try {
+        const me = wx.getStorageSync('me');
+        this.setData({ me });
+      } catch (e) {
+        console.error(e);
+      }
     },
     // 加载页面时获取实例
     onLoad: function(options) {

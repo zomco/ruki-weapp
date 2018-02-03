@@ -1,64 +1,60 @@
 <view class="page">
-  <view class="page__bd">
-    <view class="new">
-      <form bindsubmit="onFormSubmit" bindreset="onFormReset">
+  <view class="page__bd body">
+    <view hidden="{{isPopup}}" class="main">
+      <form 
+        bindsubmit="onFormSubmit"
+        bindreset="onFormReset"
+      >
         <view class="weui-cells__title">视频信息</view>
         <view class="weui-cells weui-cells_after-title">
           <view class="weui-cell">
             <view class="weui-cell__bd">
-              <view class="weui-uploader">
-                <view class="weui-uploader__hd">
-                  <view class="weui-uploader__title">视频</view>
+              <!-- 上传成功显示video组件 -->
+              <view 
+                wx:if="{{videoPhase === 'success'}}" 
+                class="aspect" 
+              >
+                <video
+                  src="{{videoFile}}"
+                  class="success__bg"
+                />
+              </view>
+              <!-- 上传中显示进度 -->
+              <view 
+                wx:elif="{{videoPhase === 'load'}}" 
+                class="aspect" 
+              >
+                <view
+                  class="loader__cover"
+                  bindtap="onCancelClick"
+                >{{videoProgress === 100 ? '处理中..': (videoProgress ? videoProgress + '%' : '')}}</view>
+                <image 
+                  class="loader__bg" 
+                  src="{{videoThumb}}"
+                />
+              </view>
+              <!-- 上传失败显示图标 -->
+              <view 
+                wx:elif="{{videoPhase === 'fail'}}" 
+                class="aspect"
+              >
+                <view 
+                  class="fail__cover"
+                  bindtap="onUploadClick"
+                >
+                  <view class="material-icons md-84">report_problem</view>
                 </view>
-                <view class="weui-uploader__bd">
-                  <!-- 上传成功显示video组件 -->
-                  <view 
-                    wx:if="{{videoPhase === 'success'}}" 
-                    class="aspect" 
-                  >
-                    <video
-                      src="{{videoFile}}"
-                      class="success__bg"
-                    />
-                  </view>
-                  <!-- 上传中显示进度 -->
-                  <view 
-                    wx:elif="{{videoPhase === 'load'}}" 
-                    class="aspect" 
-                  >
-                    <view
-                      class="loader__cover"
-                      bindtap="onCancelClick"
-                    >{{videoProgress === 100 ? '处理中..': (videoProgress ? videoProgress + '%' : '')}}</view>
-                    <image 
-                      class="loader__bg" 
-                      src="{{videoThumb}}"
-                    />
-                  </view>
-                  <!-- 上传失败显示图标 -->
-                  <view 
-                    wx:elif="{{videoPhase === 'fail'}}" 
-                    class="aspect"
-                  >
-                    <view 
-                      class="fail__cover"
-                      bindtap="onUploadClick"
-                    >
-                      <view class="material-icons md-84">report_problem</view>
-                    </view>
-                    <view class="fail__bg" />
-                  </view>
-                  <!-- 默认显示上传组件 -->
-                  <view 
-                    wx:else 
-                    class="aspect"
-                  >
-                    <view 
-                      class="uploader__cover" 
-                      bindtap="onChooseClick"
-                    ><view class="material-icons md-84">add</view></view>
-                  </view>
-                </view>
+                <view class="fail__bg" />
+              </view>
+              <!-- 默认显示上传组件 -->
+              <view 
+                wx:else 
+                class="aspect"
+              >
+                <view 
+                  class="uploader__cover" 
+                  bindtap="onChooseClick"
+                ><view class="material-icons md-84">add</view></view>
               </view>
             </view>
           </view>
@@ -118,15 +114,10 @@
         <view class="weui-cells weui-cells_after-title">
           <view class="weui-cell">
             <view class="weui-cell__bd">
-              <textarea 
-                class="weui-textarea" 
-                placeholder="令人窒息的操作" 
-                style="height: 3.3em"
-                value="{{title}}"
-                maxlength="200"
-                bindinput="onTitleChange"
-              />
-              <view class="weui-textarea-counter">{{title.length}}/200</view>
+              <view 
+                class="weui-input title"
+                bindtap="onPopupShow"
+              >{{title}}</view>
             </view>
           </view>
         </view>
@@ -159,7 +150,7 @@
           <button
             disabled="{{!title || !isAgree || !videoRaw || !date || !time || !longitude || !latitude || isSubmiting}}"
             loading="{isSubmiting}}"
-            class="weui-btn new__button" 
+            class="weui-btn main__button" 
             type="primary" 
             form-type="submit"
           >发布视频</button>
@@ -173,8 +164,21 @@
             class="weui-btn" 
             form-type="reset"
           >重置</button>
-        </view> 
+        </view>
       </form>
     </view>
+    <view hidden="{{!isPopup}}" class="popup">
+      <textarea 
+        class="weui-textarea" 
+        placeholder="令人窒息的操作" 
+        style="height: 11em"
+        maxlength="200"
+        bindinput="onTitleChange"
+        bindconfirm="onPopupHide"
+        bindblur="onPopupHide"
+        focus="{{isPopupFocus}}"
+      />
+      <view class="weui-textarea-counter">{{title.length}}/200</view>
+    </view> 
   </view>
 </view>

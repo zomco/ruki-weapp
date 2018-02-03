@@ -19,9 +19,16 @@
     <!-- 数据加载表示 -->
     <view 
       class="edges__loader"
-      wx:if="{{isLoading && videoEdges.length === 0}}"
+      wx:if="{{isLoading}}"
     >
-      <view class="fa fa-spinner fa-spin fa-2x" />
+      <view class="spinner">
+        <view class="spinner-wrapper">
+          <view class="rotator">
+            <view class="inner-spin"></view>
+            <view class="inner-spin"></view>
+          </view>
+        </view>
+      </view>
     </view>
     <!-- 数据列表 -->
     <view class="edges">
@@ -32,19 +39,23 @@
       >
         <!-- 播放结束时显示重放按钮 -->
         <view
-          wx:if="{{videoPhase === 'end' && videoId === item.cursor}}"
+          wx:if="{{videoPhase === 'end' && videoCursor === item.cursor}}"
+          data-id="{{item.node.id}}"
           id="{{item.cursor}}"
           class="ender"
           bindtap="onEnderClick"
         >
           <view class="ender__cover">
-            <view class="ender__btn"><view class="fa fa-repeat fa-2x" /></view>
+            <view class="ender__btn">
+              <view class="material-icons md-48">repeat</view>
+            </view>
           </view>
           <image class="ender__bg" src="{{item.node.posterFile}}"/>
         </view>
         <!-- 播放中使用原生组件 -->
         <view
-          wx:elif="{{videoPhase === 'play' && videoId === item.cursor}}"
+          wx:elif="{{videoPhase === 'play' && videoCursor === item.cursor}}"
+          data-id="{{item.node.id}}"
           id="{{item.cursor}}"
           class="player"
         >
@@ -61,18 +72,21 @@
         </view>
         <!-- 播放前显示视频加载 -->
         <view
-          wx:elif="{{videoPhase === 'load' && videoId === item.cursor}}"
+          wx:elif="{{videoPhase === 'load' && videoCursor === item.cursor}}"
+          data-id="{{item.node.id}}"
           id="{{item.cursor}}"
           class="loader"
         >
           <view class="loader__cover">
-            <view class="loader__spinner"><view class="fa fa-spin fa-spinner fa-2x" /></view>
+            <view class="loader__spinner">
+              <view class="fa fa-spin fa-spinner fa-2x" /></view>
           </view>
           <view class="loader__bg" /> 
         </view>
         <!-- 默认显示视频封面 -->
         <view
           wx:else
+          data-id="{{item.node.id}}"
           id="{{item.cursor}}"
           class="poster"
           bindtap="onPosterClick"
