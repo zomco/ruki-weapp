@@ -88,18 +88,24 @@ Page({
       wafer.request({
         url: `${config.service.videoUrl}/${id}`,
         success: function (res) {
-          wx.hideLoading();
-          me.setData({
-            isLoading: false,
-            video: res.data.node,
-          });
+          if (res.statusCode == '200') {
+            me.setData({
+              isLoading: false,
+              loadingError: null,
+              video: res.data.node,
+            });
+          } else {
+            me.setData({
+              isLoading: false,
+              loadingError: '系统错误',
+            });
+          }
         },
         fail: function (err) {
-          wx.hideLoading();
-          const { message } = err;
+          const { errMsg } = err;
           me.setData({ 
             isLoading: false,
-            loadingError: message,
+            loadingError: errMsg,
           });
         }
       });

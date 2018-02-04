@@ -50,11 +50,7 @@ Page({
       // 获取用户信息
       const me = wx.getStorageSync('me');
       if (me) {
-        this.setData({
-          me,
-          isLoading: true,
-          loadingError: null,
-        });
+        this.setData({ me });
         // 获取历史观看
         that.loadHistories();
         // 获取管理视频
@@ -70,6 +66,10 @@ Page({
   },
   loadHistories: function () {
     const that = this;
+    that.setData({
+      isHistoryLoading: true,
+      historyLoadingError: null,
+    });
     wafer.request({
       login: true,
       data: { first: 10, filter: '-2' },
@@ -102,6 +102,10 @@ Page({
   },
   loadItems: function () {
     const that = this;
+    that.setData({
+      isItemLoading: true,
+      itemLoadingError: null,
+    });
     wafer.request({
       login: true,
       data: { first: 10, filter: '-1' },
