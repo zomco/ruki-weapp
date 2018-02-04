@@ -16,18 +16,24 @@
         style="width: 1em; top: 40px; left: {{40+sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);" 
       />
     </view>
+    <!-- 加载失败表示 -->
+    <view 
+      class="edges__error"
+      wx:if="{{loadingError}}"
+    >
+      <image class="error__image" src="../../images/error.png" />
+      <view class="error__primary">翻车了({{loadingError}})</view>
+      <view class="error__secondary">我们正在修复</view>
+      <button bindtap="onRefreshClick" class="error__button">刷新</button>
+    </view>
     <!-- 数据加载表示 -->
     <view 
       class="edges__loader"
-      wx:if="{{isLoading}}"
+      wx:elif="{{isLoading}}"
     >
-      <view class="spinner">
-        <view class="spinner-wrapper">
-          <view class="rotator">
-            <view class="inner-spin"></view>
-            <view class="inner-spin"></view>
-          </view>
-        </view>
+      <view class="half-circle-spinner">
+        <view class="circle circle-1"/>
+        <view class="circle circle-2"/>
       </view>
     </view>
     <!-- 数据列表 -->
@@ -79,7 +85,11 @@
         >
           <view class="loader__cover">
             <view class="loader__spinner">
-              <view class="fa fa-spin fa-spinner fa-2x" /></view>
+              <view class="half-circle-spinner">
+                <view class="circle circle-1"/>
+                <view class="circle circle-2"/>
+              </view>
+            </view>
           </view>
           <view class="loader__bg" /> 
         </view>
@@ -111,11 +121,6 @@
               data-url="/pages/video/video?id={{item.node.id}}"
               bindtap="onShareClick"
             >share</view>
-            <view
-              hidden
-              class="fa fa-trash-o item__action"
-              bindtap="onTrashClick"
-            />
           </view>
           <view class="item__tags">
             <view class="item__tag">

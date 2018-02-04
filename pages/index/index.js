@@ -54,7 +54,6 @@ Page({
       }
     });
   },
-
   onShow: function () {
     // 页面显示时加载暂停播放的视频
     const { videoCursor: oldVideoCursor } = this.data;
@@ -113,26 +112,33 @@ Page({
         url: config.service.videoUrl,
         data: { ...args, filter },
         success: function (res) {
-          const {
-            edges: newEdges,
-            pageInfo: {
-              hasNextPage,
-              hasPreviousPage
-            }
-          } = res.data.connection;
-          that.setData({
-            isLoading: false,
-            loadingError: null,
-            videoEdges: [...edges, ...newEdges],
-            videoPageInfo: { hasNextPage, hasPreviousPage }
-          });
-          resolve('success');
+          if (res.statusCode == '200') {
+            const {
+              edges: newEdges,
+                pageInfo: {
+                hasNextPage,
+                  hasPreviousPage
+              }
+            } = res.data.connection;
+              that.setData({
+                isLoading: false,
+                loadingError: null,
+                videoEdges: [...edges, ...newEdges],
+                videoPageInfo: { hasNextPage, hasPreviousPage }
+              });
+              resolve('success');
+          } else {
+            that.setData({
+              isLoading: false,
+              loadingError: '系统错误',
+            });
+          }
         },
         fail: function (err) {
-          const { message } = err;
+          const { errMsg } = err;
           that.setData({
             isLoading: false,
-            loadingError: message,
+            loadingError: errMsg,
           });
           resolve('fail');
         },
@@ -299,5 +305,9 @@ Page({
     }
     const { url } = e.currentTarget.dataset;
     wx.navigateTo({ url });
+  },
+  // 刷新按钮
+  onRefreshClick: function (e) {
+    this.onPullDownRefresh();
   },
 });

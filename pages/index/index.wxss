@@ -7,6 +7,45 @@ page,
   padding-bottom: 0;
 }
 
+.edges__error {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.error__image {
+  width: 288rpx;
+  height: 179rpx;
+  margin-bottom: 100rpx;
+}
+
+.error__primary {
+  color: #666666;
+  font-size: 30rpx;
+  margin: 10rpx;
+}
+
+.error__secondary {
+  color: #a3a3a3;
+  font-size: 26rpx;
+  margin: 10rpx;
+}
+
+.error__button {
+  background-color: #f8b62d!important;
+  width: 180rpx;
+  height: 60rpx;
+  color: white;
+  font-size: 26rpx;
+  border-radius: 30rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .edges__loader {
   width: 100%;
   height: 100%;

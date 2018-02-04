@@ -33,8 +33,10 @@ Page({
     autoPlay: false,
     historyEdges: [],
     itemEdges: [],
-    isLoading: false,
-    loadingError: null,
+    isItemLoading: false,
+    itemLoadingError: null,
+    isHistoryLoading: false,
+    historyLoadingError: null,
   },
   onShow: function () {
     try {
@@ -78,29 +80,22 @@ Page({
             edges: newEdges,
           } = res.data.connection;
           that.setData({
-            isLoading: false,
-            loadingError: null,
+            isHistoryLoading: false,
+            historyLoadingError: null,
             historyEdges: newEdges,
           });
         } else {
           that.setData({
-            isLoading: false,
-            loadingError: '系统问题',
-          });
-          wx.showToast({
-            title: '系统问题，加载视频失败',
-            icon: 'none',
+            isHistoryLoading: false,
+            historyLoadingError: '系统问题',
           });
         }
       },
-      fail: function (res) {
+      fail: function (err) {
+        const { errMsg } = err;
         that.setData({
-          isLoading: false,
-          loadingError: '网络问题',
-        });
-        wx.showToast({
-          title: '网络问题，加载视频失败',
-          icon: 'none',
+          isHistoryLoading: false,
+          historyLoadingError: errMsg,
         });
       }
     });
@@ -117,29 +112,22 @@ Page({
             edges: newEdges,
           } = res.data.connection;
           that.setData({
-            isLoading: false,
-            loadingError: null,
+            isItemLoading: false,
+            itemLoadingError: null,
             itemEdges: newEdges,
           });
         } else {
           that.setData({
-            isLoading: false,
-            loadingError: '系统问题',
-          });
-          wx.showToast({
-            title: '系统问题，加载视频失败',
-            icon: 'none',
+            isItemLoading: false,
+            itemLoadingError: '系统问题',
           });
         }
       },
-      fail: function (res) {
+      fail: function (err) {
+        const { errMsg } = err;
         that.setData({
-          isLoading: false,
-          loadingError: '网络问题',
-        });
-        wx.showToast({
-          title: '网络问题，加载视频失败',
-          icon: 'none',
+          isItemLoading: false,
+          itemLoadingError: errMsg,
         });
       }
     });

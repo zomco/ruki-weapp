@@ -144,25 +144,22 @@
           </label>
         </checkbox-group>
         <view 
-          class="weui-btn-area"
-          hidden="{{!title || !isAgree || !videoRaw || !date || !time || !longitude || !latitude}}"
+          class="buttons"
         >
           <button
+            hidden="{{!title || !isAgree || !videoRaw || !date || !time || !longitude || !latitude}}"
             disabled="{{!title || !isAgree || !videoRaw || !date || !time || !longitude || !latitude || isSubmiting}}"
-            loading="{isSubmiting}}"
-            class="weui-btn main__button" 
+            loading="{{isSubmiting}}"
+            class="submit__button" 
             type="primary" 
             form-type="submit"
           >发布视频</button>
-        </view>
-        <view 
-          class="weui-btn-area"
-          hidden="{{!title && !isAgree && !videoRaw && !date && !time && !longitude && !latitude}}"
-        >
           <button
+            hidden="{{!title && !isAgree && !videoRaw && !date && !time && !longitude && !latitude}}"
             disabled="{{!title && !isAgree && !videoRaw && !date && !time && !longitude && !latitude || isSubmiting}}"
-            class="weui-btn" 
+            class="reset__button" 
             form-type="reset"
+            plain
           >重置</button>
         </view>
       </form>
@@ -177,6 +174,7 @@
         bindconfirm="onPopupHide"
         bindblur="onPopupHide"
         focus="{{isPopupFocus}}"
+        value="{{title}}"
       />
       <view class="weui-textarea-counter">{{title.length}}/200</view>
     </view> 

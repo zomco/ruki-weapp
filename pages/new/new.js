@@ -221,7 +221,7 @@ Page({
       },
       url: config.service.videoUrl,
       success: function (res) {
-        if (res.statusCode === '200') {
+        if (res.statusCode == '200') {
           const { id } = res.data;
           that.setData({
             isSubmiting: false,
@@ -240,18 +240,19 @@ Page({
             submitingError: '系统问题',
           });
           wx.showToast({
-            title: '系统问题，发布视频失败',
+            title: '系统问题，请稍后再试',
             icon: 'none',
           });
         }
       },
-      fail: function (res) {
+      fail: function (err) {
+        const { errMsg } = err;
         that.setData({ 
           isSubmiting: false,
           submitingError: '网络问题',
         });
         wx.showToast({
-          title: '网络问题，发布视频失败',
+          title: `网络问题(${errMsg})，请稍后再试`,
           icon: 'none',
         });
       }
