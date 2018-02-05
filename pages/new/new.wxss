@@ -11,28 +11,21 @@ page,
     padding-bottom: 0;
 }
 
-.buttons {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin: 40rpx;
+.new {
+
 }
 
-.submit__button {
-  background-color: #f8b62d!important;
-  width: 220rpx;
-  height: 60rpx;
-  color: white;
-  font-size: 26rpx;
-  border-radius: 30rpx;
+.login {
+  height: 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.reset__button {
+.login__button {
   background-color: white!important;
-  width: 220rpx;
+  width: 180rpx;
   height: 60rpx;
   color: black;
   font-size: 26rpx;
@@ -40,6 +33,58 @@ page,
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.message__primary {
+  color: #666666;
+  font-size: 30rpx;
+  margin: 10rpx;
+}
+
+.message__secondary {
+  color: #a3a3a3;
+  font-size: 26rpx;
+  margin: 10rpx;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.submit__button {
+  background-color: #f8b62d!important;
+  width: 180rpx;
+  height: 60rpx;
+  color: white;
+  font-size: 26rpx;
+  border-radius: 30rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10rpx;
+}
+
+.reset__button {
+  background-color: white!important;
+  width: 180rpx;
+  height: 60rpx;
+  color: black;
+  font-size: 26rpx;
+  border-radius: 30rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10rpx;
 }
 
 .aspect {

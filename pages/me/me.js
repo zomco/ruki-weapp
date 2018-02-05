@@ -57,8 +57,8 @@ Page({
         that.loadItems();
       } else {
         // 获取历史观看
-        const historyEdges = wx.getStorageSync('historyEdges');
-        that.setData({ me, historyEdges });
+        // const historyEdges = wx.getStorageSync('historyEdges');
+        // that.setData({ me, historyEdges });
       }
     } catch (e) {
       console.error(e);
@@ -159,10 +159,15 @@ Page({
     const that = this;
     login(function (res) {
       that.setData({ me: res });
+      // 把用户信息写在storage
       wx.setStorage({
         key: 'me',
         data: res,
       });
+      // 获取历史观看
+      that.loadHistories();
+      // 获取管理视频
+      that.loadItems();
     });
   }
 });

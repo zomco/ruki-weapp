@@ -57,7 +57,7 @@
         </view>
       </view>
       <view class="settings">
-        <view class="setting">
+        <view class="setting" hidden>
           <view class="setting__text">自动播放</view>
           <switch
             checked="{{autoPlay}}"

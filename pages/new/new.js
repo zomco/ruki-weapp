@@ -55,10 +55,12 @@ Page({
     // 标题编辑
     isPopup: false,
     isPopupFocus: false,
+    // 用户信息
+    me: null,
   },
   onShow: function () {
-    // 获取用户信息
     try {
+      // 获取用户信息
       const me = wx.getStorageSync('me');
       this.setData({ me });
     } catch (e) {
@@ -88,7 +90,7 @@ Page({
         });
         // 自动执行上传
         that.onUploadClick();
-      }
+      },
     })
   },
   // 取消上传
@@ -107,42 +109,40 @@ Page({
   onUploadClick: function (e) {
     const { videoFile } = this.data;
     const that = this;
-    login(function (res) {
-      that.setData({ videoPhase: 'load' });
-      // 模拟wafer从storage获取skey和id
-      wx.getStorage({
-        key: 'weapp_session_' + WX_SESSION_MAGIC_ID,
-        success: function(res) {
-          const { id, skey } = res.data;
-          const authHeader = {};
-          authHeader[WX_HEADER_ID] = id;
-          authHeader[WX_HEADER_SKEY] = skey;
-          const task = wx.uploadFile({
-            url: config.service.uploadUrl,
-            filePath: videoFile,
-            name: 'file',
-            header: authHeader,
-            success: function (res) {
-              const { raw, meta } = JSON.parse(res.data);
-              that.setData({ 
-                videoPhase: 'success',
-                videoRaw: raw,
-                date: meta.date,
-                time: meta.time,
-              });
-            },
-            fail: function (res) {
-              that.setDat({ videoPhase: 'fail' });
-            }
-          });
-          task.onProgressUpdate(function (res) {
-            const { progress } = res;
-            that.setData({ videoProgress: progress });
-          });
-          that.task = task;
-        },
-      })
-    });
+    that.setData({ videoPhase: 'load' });
+    // 模拟wafer从storage获取skey和id
+    wx.getStorage({
+      key: 'weapp_session_' + WX_SESSION_MAGIC_ID,
+      success: function (res) {
+        const { id, skey } = res.data;
+        const authHeader = {};
+        authHeader[WX_HEADER_ID] = id;
+        authHeader[WX_HEADER_SKEY] = skey;
+        const task = wx.uploadFile({
+          url: config.service.uploadUrl,
+          filePath: videoFile,
+          name: 'file',
+          header: authHeader,
+          success: function (res) {
+            const { raw, meta } = JSON.parse(res.data);
+            that.setData({
+              videoPhase: 'success',
+              videoRaw: raw,
+              date: meta.date,
+              time: meta.time,
+            });
+          },
+          fail: function (res) {
+            that.setDat({ videoPhase: 'fail' });
+          }
+        });
+        task.onProgressUpdate(function (res) {
+          const { progress } = res;
+          that.setData({ videoProgress: progress });
+        });
+        that.task = task;
+      },
+    })
   },
   // 日期发生变化
   onDateClick: function (e) {
@@ -227,12 +227,15 @@ Page({
             isSubmiting: false,
             submitingError: null,
           });
-          wx.showToast({
-            title: '发布成功，立即前往视频页面',
-          });
-          that.onFormReset();
-          wx.navigateTo({
-            url: `/pages/item/item?id=${id}`,
+          wx.showModal({
+            title: '提交成功',
+            content: '视频正在转码，完成后可在「我的视频」查看',
+            confirmText: '好的',
+            showCancel: false,
+            complete: function () {
+              that.onFormReset();
+              wx.switchTab({ url: '/pages/index/index' });
+            }
           });
         } else {
           that.setData({
@@ -240,7 +243,7 @@ Page({
             submitingError: '系统问题',
           });
           wx.showToast({
-            title: '系统问题，请稍后再试',
+            title: `翻车了(系统问题)`,
             icon: 'none',
           });
         }
@@ -249,7 +252,7 @@ Page({
         const { errMsg } = err;
         that.setData({ 
           isSubmiting: false,
-          submitingError: '网络问题',
+          submitingError: errMsg,
         });
         wx.showToast({
           title: `网络问题(${errMsg})，请稍后再试`,
@@ -261,18 +264,37 @@ Page({
   // 重置表单
   onFormReset: function (e) {
     this.setData({
+      // 视频文件
       videoFile: null,
       videoThumb: null,
       videoPhase: '',
       videoProgress: 0,
       videoRaw: null,
+      // 时间日期
       time: '',
       date: '',
+      // 地理位置
       latitude: 0,
       longitude: 0,
       location: '',
+      // 标题
       title: '',
+      // 条款同意
       isAgree: false,
+      isSubmiting: false,
+      submitingError: null,
+      // 标题编辑
+      isPopup: false,
+      isPopupFocus: false,
     })
-  }
+  },
+  // 登录成功
+  onLoginSuccess: function (e) {
+    const { userInfo: me } = e.detail;
+    this.setData({ me });
+    wx.setStorage({
+      key: 'me',
+      data: me,
+    });
+  },
 });

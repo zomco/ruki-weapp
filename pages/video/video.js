@@ -40,6 +40,7 @@ Page({
       // 实例
       video: null,
       videoPhase: null,
+      videoId: null,
       // 查询状态
       isLoading: false,
       loadingError: null,
@@ -56,9 +57,10 @@ Page({
     },
     // 加载页面时获取实例
     onLoad: function(options) {
-      const { id, shuffle, q } = options;
+      const { id, q } = options;
       if (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
         // 小程序内根据id获取详情
+        this.setData({ videoId: id });
         this.loadVideo(id);
       } else if (q) {
         // 外部二维码获取详情
@@ -73,7 +75,8 @@ Page({
         if (globalObj.type !== 'Post') {
           return;
         }
-        this.bindButtonLoad(globalObj.id);
+        this.setData({ videoId: globalObj.id });
+        this.loadVideo(globalObj.id);
       } else {
         // 无效的参数
       }
@@ -169,5 +172,10 @@ Page({
       const { url } = e.currentTarget.dataset;
       console.log(url);
       wx.navigateTo({ url });
+    },
+    // 刷新
+    onRefreshClick: function () {
+      const { videoId } = this.data;
+      this.loadVideo(videoId);
     }
 });

@@ -1,6 +1,18 @@
 <view class="page">
   <view class="page__bd">
-    <view class="video">
+    <view wx:if="{{loadingError}}" class="error">
+      <image class="error__image" src="../../images/error.png" />
+      <view class="error__primary">翻车了({{loadingError}})</view>
+      <view class="error__secondary">我们正在修复</view>
+      <button bindtap="onRefreshClick" class="error__button">刷新</button>
+    </view>
+    <view wx:elif="{{isLoading}}" class="loader">
+      <view class="half-circle-spinner">
+        <view class="circle circle-1"/>
+        <view class="circle circle-2"/>
+      </view>
+    </view>
+    <view wx:else class="video">
       <view class="video__main">
         <!-- 播放结束时显示重放按钮 -->
         <view

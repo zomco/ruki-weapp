@@ -1,182 +1,195 @@
 <view class="page">
   <view class="page__bd body">
-    <view hidden="{{isPopup}}" class="main">
-      <form 
-        bindsubmit="onFormSubmit"
-        bindreset="onFormReset"
-      >
-        <view class="weui-cells__title">视频信息</view>
-        <view class="weui-cells weui-cells_after-title">
-          <view class="weui-cell">
-            <view class="weui-cell__bd">
-              <!-- 上传成功显示video组件 -->
-              <view 
-                wx:if="{{videoPhase === 'success'}}" 
-                class="aspect" 
-              >
-                <video
-                  src="{{videoFile}}"
-                  class="success__bg"
-                />
-              </view>
-              <!-- 上传中显示进度 -->
-              <view 
-                wx:elif="{{videoPhase === 'load'}}" 
-                class="aspect" 
-              >
-                <view
-                  class="loader__cover"
-                  bindtap="onCancelClick"
-                >{{videoProgress === 100 ? '处理中..': (videoProgress ? videoProgress + '%' : '')}}</view>
-                <image 
-                  class="loader__bg" 
-                  src="{{videoThumb}}"
-                />
-              </view>
-              <!-- 上传失败显示图标 -->
-              <view 
-                wx:elif="{{videoPhase === 'fail'}}" 
-                class="aspect"
-              >
-                <view 
-                  class="fail__cover"
-                  bindtap="onUploadClick"
-                >
-                  <view class="material-icons md-84">report_problem</view>
-                </view>
-                <view class="fail__bg" />
-              </view>
-              <!-- 默认显示上传组件 -->
-              <view 
-                wx:else 
-                class="aspect"
-              >
-                <view 
-                  class="uploader__cover" 
-                  bindtap="onChooseClick"
-                ><view class="material-icons md-84">add</view></view>
-              </view>
-            </view>
-          </view>
-          <view
-            hidden="{{videoPhase !== 'success'}}"
-            class="weui-cell weui-cell_input"
-          >
-            <view class="weui-cell__hd">
-              <view class="weui-label">拍摄日期</view>
-            </view>
-            <view class="weui-cell__bd">
-              <picker
-                disabled="{{videoPhase !== 'success'}}"
-                mode="date"
-                value="{{date}}" 
-                start="2000-01-01" 
-                end="2030-01-01" 
-                bindchange="onDateClick"
-              >
-                <view class="weui-input">{{date}}</view>
-              </picker>
-            </view>
-          </view>
-          <view 
-            hidden="{{videoPhase !== 'success'}}"
-            class="weui-cell weui-cell_input"
-          >
-            <view class="weui-cell__hd">
-              <view class="weui-label">拍摄时间</view>
-            </view>
-            <view class="weui-cell__bd">
-              <picker
-                disabled="{{videoPhase !== 'success'}}"
-                mode="time" 
-                value="{{time}}" 
-                start="00:00" 
-                end="23:59" 
-                bindchange="onTimeClick"
-              >
-                <view class="weui-input">{{time}}</view>
-              </picker>
-            </view>
-          </view>
-          <view class="weui-cell weui-cell_input">
-            <view class="weui-cell__hd">
-              <view class="weui-label">拍摄地点</view>
-            </view>
-            <view class="weui-cell__bd">
-              <view 
-                class="weui-input location"
-                bindtap="onLocationClick"
-              >{{location}}</view>
-            </view>
-          </view>
-        </view>
-        <view class="weui-cells__title">标题</view>
-        <view class="weui-cells weui-cells_after-title">
-          <view class="weui-cell">
-            <view class="weui-cell__bd">
-              <view 
-                class="weui-input title"
-                bindtap="onPopupShow"
-              >{{title}}</view>
-            </view>
-          </view>
-        </view>
-        <checkbox-group bindchange="onIsAgreeClick">
-          <label class="weui-agree" for="weuiAgree">
-            <view class="weui-agree__text">
-              <checkbox 
-                class="weui-agree__checkbox" 
-                id="weuiAgree"
-                value="true"
-                checked="{{isAgree}}"
-                color="#f8b62d"
-              />
-              <view class="weui-agree__checkbox-icon">
-                <icon 
-                  class="weui-agree__checkbox-icon-check" 
-                  type="success_no_circle" 
-                  size="9" 
-                  wx:if="{{isAgree}}"
-                ></icon>
-              </view>
-              阅读并同意<navigator url="/pages/terms/terms" class="weui-agree__link">《相关条款》</navigator>
-            </view>
-          </label>
-        </checkbox-group>
-        <view 
-          class="buttons"
+    <view wx:if="{{me}}" class="new">
+      <view hidden="{{isPopup}}" class="main">
+        <form 
+          bindsubmit="onFormSubmit"
         >
-          <button
-            hidden="{{!title || !isAgree || !videoRaw || !date || !time || !longitude || !latitude}}"
-            disabled="{{!title || !isAgree || !videoRaw || !date || !time || !longitude || !latitude || isSubmiting}}"
-            loading="{{isSubmiting}}"
-            class="submit__button" 
-            type="primary" 
-            form-type="submit"
-          >发布视频</button>
-          <button
-            hidden="{{!title && !isAgree && !videoRaw && !date && !time && !longitude && !latitude}}"
-            disabled="{{!title && !isAgree && !videoRaw && !date && !time && !longitude && !latitude || isSubmiting}}"
-            class="reset__button" 
-            form-type="reset"
-            plain
-          >重置</button>
-        </view>
-      </form>
+          <view class="weui-cells__title">视频信息</view>
+          <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell">
+              <view class="weui-cell__bd">
+                <!-- 上传成功显示video组件 -->
+                <view 
+                  wx:if="{{videoPhase === 'success'}}" 
+                  class="aspect" 
+                >
+                  <video
+                    src="{{videoFile}}"
+                    class="success__bg"
+                  />
+                </view>
+                <!-- 上传中显示进度 -->
+                <view 
+                  wx:elif="{{videoPhase === 'load'}}" 
+                  class="aspect" 
+                >
+                  <view
+                    class="loader__cover"
+                    bindtap="onCancelClick"
+                  >
+                    <view wx:if="{{videoProgress !== 100}}">{{videoProgress}}%</view>
+                    <view wx:else class="half-circle-spinner">
+                      <view class="circle circle-1"/>
+                      <view class="circle circle-2"/>
+                    </view>
+                  </view>
+                  <image 
+                    class="loader__bg" 
+                    src="{{videoThumb}}"
+                  />
+                </view>
+                <!-- 上传失败显示图标 -->
+                <view 
+                  wx:elif="{{videoPhase === 'fail'}}" 
+                  class="aspect"
+                >
+                  <view 
+                    class="fail__cover"
+                    bindtap="onUploadClick"
+                  >
+                    <view class="material-icons md-84">report_problem</view>
+                  </view>
+                  <view class="fail__bg" />
+                </view>
+                <!-- 默认显示上传组件 -->
+                <view 
+                  wx:else 
+                  class="aspect"
+                >
+                  <view 
+                    class="uploader__cover" 
+                    bindtap="onChooseClick"
+                  ><view class="material-icons md-84">add</view></view>
+                </view>
+              </view>
+            </view>
+            <view
+              hidden="{{videoPhase !== 'success'}}"
+              class="weui-cell weui-cell_input"
+            >
+              <view class="weui-cell__hd">
+                <view class="weui-label">拍摄日期</view>
+              </view>
+              <view class="weui-cell__bd">
+                <picker
+                  disabled="{{videoPhase !== 'success'}}"
+                  mode="date"
+                  value="{{date}}" 
+                  start="2000-01-01" 
+                  end="2030-01-01" 
+                  bindchange="onDateClick"
+                >
+                  <view class="weui-input">{{date}}</view>
+                </picker>
+              </view>
+            </view>
+            <view 
+              hidden="{{videoPhase !== 'success'}}"
+              class="weui-cell weui-cell_input"
+            >
+              <view class="weui-cell__hd">
+                <view class="weui-label">拍摄时间</view>
+              </view>
+              <view class="weui-cell__bd">
+                <picker
+                  disabled="{{videoPhase !== 'success'}}"
+                  mode="time" 
+                  value="{{time}}" 
+                  start="00:00" 
+                  end="23:59" 
+                  bindchange="onTimeClick"
+                >
+                  <view class="weui-input">{{time}}</view>
+                </picker>
+              </view>
+            </view>
+            <view class="weui-cell weui-cell_input">
+              <view class="weui-cell__hd">
+                <view class="weui-label">拍摄地点</view>
+              </view>
+              <view class="weui-cell__bd">
+                <view 
+                  class="weui-input location"
+                  bindtap="onLocationClick"
+                >{{location}}</view>
+              </view>
+            </view>
+          </view>
+          <view class="weui-cells__title">标题</view>
+          <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell">
+              <view class="weui-cell__bd">
+                <view 
+                  class="weui-input title"
+                  bindtap="onPopupShow"
+                >{{title}}</view>
+              </view>
+            </view>
+          </view>
+          <checkbox-group bindchange="onIsAgreeClick">
+            <label class="weui-agree" for="weuiAgree">
+              <view class="weui-agree__text">
+                <checkbox 
+                  class="weui-agree__checkbox" 
+                  id="weuiAgree"
+                  value="true"
+                  checked="{{isAgree}}"
+                  color="#f8b62d"
+                />
+                <view class="weui-agree__checkbox-icon">
+                  <icon 
+                    class="weui-agree__checkbox-icon-check" 
+                    type="success_no_circle" 
+                    size="9" 
+                    wx:if="{{isAgree}}"
+                  ></icon>
+                </view>
+                阅读并同意<navigator url="/pages/terms/terms" class="weui-agree__link">《相关条款》</navigator>
+              </view>
+            </label>
+          </checkbox-group>
+          <view class="buttons">
+            <button
+              hidden="{{!videoRaw}}"
+              disabled="{{!title || !isAgree || !videoRaw || !date || !time || !longitude || !latitude || isSubmiting}}"
+              loading="{{isSubmiting}}"
+              class="submit__button" 
+              type="primary" 
+              form-type="submit"
+            >提交视频</button>
+            <button
+              hidden="{{!videoRaw}}"
+              disabled="{{!videoRaw || isSubmiting}}"
+              class="reset__button"
+              bindtap="onChooseClick"
+              plain
+            >换一个</button>
+          </view>
+        </form>
+      </view>
+      <view hidden="{{!isPopup}}" class="popup">
+        <textarea 
+          class="weui-textarea" 
+          placeholder="令人窒息的操作" 
+          style="height: 11em"
+          maxlength="200"
+          bindinput="onTitleChange"
+          bindconfirm="onPopupHide"
+          bindblur="onPopupHide"
+          focus="{{isPopupFocus}}"
+          value="{{title}}"
+        />
+        <view class="weui-textarea-counter">{{title.length}}/200</view>
+      </view>
     </view>
-    <view hidden="{{!isPopup}}" class="popup">
-      <textarea 
-        class="weui-textarea" 
-        placeholder="令人窒息的操作" 
-        style="height: 11em"
-        maxlength="200"
-        bindinput="onTitleChange"
-        bindconfirm="onPopupHide"
-        bindblur="onPopupHide"
-        focus="{{isPopupFocus}}"
-        value="{{title}}"
-      />
-      <view class="weui-textarea-counter">{{title.length}}/200</view>
-    </view> 
+    <view wx:else class="login">
+      <button
+        class="login__button"
+        plain
+        open-type="getUserInfo"
+        bindgetuserinfo="onLoginSuccess"
+      >登录</button>
+    </view>
   </view>
 </view>
