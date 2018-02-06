@@ -41,6 +41,7 @@ Page({
       video: null,
       videoPhase: null,
       videoId: null,
+      videoTime: 0,
       // 查询状态
       isLoading: false,
       loadingError: null,
@@ -120,20 +121,78 @@ Page({
     },
     // 视频播放开始
     onVideoPlay: function (e) {
-      console.log('video play');
-      // this.setData({ videoPhase: 'load'})
+      // console.log('video play');
+      const {
+        videoId,
+        videoTime: time,
+        me,
+      } = this.data;
+      if (me) {
+        // 登录用户直接更新行为
+        wafer.request({
+          method: 'POST',
+          data: {
+            action: 'play',
+            time,
+            videoId,
+          },
+          url: config.service.viewUrl,
+        });
+      } else {
+        // 非登录用户写到本地缓存里
+
+      }
     },
     // 视频播放暂停
     onVideoPause: function (e) {
-      console.log('video pause');
+      // console.log('video pause');
+      const {
+        videoId,
+        videoTime: time,
+        me,
+      } = this.data;
+      if (me) {
+        // 登录用户直接更新行为
+        wafer.request({
+          method: 'POST',
+          data: {
+            action: 'pause',
+            time,
+            videoId,
+          },
+          url: config.service.viewUrl,
+        });
+      } else {
+        // 非登录用户写到本地缓存里
+      }
     },
     // 视频播放结束
     onVideoEnded: function (e) {
       this.setData({ videoPhase: 'end' });
+      const {
+        videoId,
+        videoTime: time,
+        me,
+      } = this.data;
+      if (me) {
+        // 登录用户直接更新行为
+        wafer.request({
+          method: 'POST',
+          data: {
+            action: 'end',
+            time,
+            videoId,
+          },
+          url: config.service.viewUrl,
+        });
+      } else {
+        // 非登录用户写到本地缓存里
+      }
     },
     // 视频播放进度变化
     onVideoTimeUpdate: function (e) {
-      // console.log('video time update');
+      const { currentTime } = e.detail;
+      this.setData({ videoTime: currentTime });
     },
     // 设置转发
     onShareAppMessage: function (options) {
