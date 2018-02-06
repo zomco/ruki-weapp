@@ -56,6 +56,7 @@ Page({
         // 获取管理视频
         that.loadItems();
       } else {
+        this.setData({ me: null });
         // 获取历史观看
         // const historyEdges = wx.getStorageSync('historyEdges');
         // that.setData({ me, historyEdges });
@@ -64,76 +65,92 @@ Page({
       console.error(e);
     }
   },
+  // 拖到顶部时刷新
+  onPullDownRefresh: function () {
+    Promise.all([this.loadHistories(), this.loadItems()]).then(function (values) {
+      wx.stopPullDownRefresh();
+    });
+  },
   loadHistories: function () {
     const that = this;
-    that.setData({
-      isHistoryLoading: true,
-      historyLoadingError: null,
-    });
-    wafer.request({
-      login: true,
-      data: { first: 10, filter: '-2' },
-      url: config.service.videoUrl,
-      success: function (res) {
-        if (res.statusCode == '200') {
-          const {
-            edges: newEdges,
-          } = res.data.connection;
+    return new Promise(function (resolve, reject) {
+      that.setData({
+        isHistoryLoading: true,
+        historyLoadingError: null,
+      });
+      wafer.request({
+        login: true,
+        data: { first: 10, filter: '-2' },
+        url: config.service.videoUrl,
+        success: function (res) {
+          if (res.statusCode == '200') {
+            const {
+              edges: newEdges,
+            } = res.data.connection;
+            that.setData({
+              isHistoryLoading: false,
+              historyLoadingError: null,
+              historyEdges: newEdges,
+            });
+            resolve('success');
+          } else {
+            that.setData({
+              isHistoryLoading: false,
+              historyLoadingError: '系统问题',
+            });
+            reject('fail');
+          }
+        },
+        fail: function (err) {
+          const { errMsg } = err;
           that.setData({
             isHistoryLoading: false,
-            historyLoadingError: null,
-            historyEdges: newEdges,
+            historyLoadingError: errMsg,
           });
-        } else {
-          that.setData({
-            isHistoryLoading: false,
-            historyLoadingError: '系统问题',
-          });
+          reject('fail');
         }
-      },
-      fail: function (err) {
-        const { errMsg } = err;
-        that.setData({
-          isHistoryLoading: false,
-          historyLoadingError: errMsg,
-        });
-      }
+      });
     });
   },
   loadItems: function () {
     const that = this;
-    that.setData({
-      isItemLoading: true,
-      itemLoadingError: null,
-    });
-    wafer.request({
-      login: true,
-      data: { first: 10, filter: '-1' },
-      url: config.service.videoUrl,
-      success: function (res) {
-        if (res.statusCode == '200') {
-          const { 
-            edges: newEdges,
-          } = res.data.connection;
+    return new Promise(function (resolve, reject) {
+      that.setData({
+        isItemLoading: true,
+        itemLoadingError: null,
+      });
+      wafer.request({
+        login: true,
+        data: { first: 10, filter: '-1' },
+        url: config.service.videoUrl,
+        success: function (res) {
+          if (res.statusCode == '200') {
+            const {
+              edges: newEdges,
+            } = res.data.connection;
+            that.setData({
+              isItemLoading: false,
+              itemLoadingError: null,
+              itemEdges: newEdges,
+            });
+            resolve('success');
+          } else {
+            that.setData({
+              isItemLoading: false,
+              itemLoadingError: '系统问题',
+            });
+            reject('fail');
+          }
+        },
+        fail: function (err) {
+          const { errMsg } = err;
           that.setData({
             isItemLoading: false,
-            itemLoadingError: null,
-            itemEdges: newEdges,
+            itemLoadingError: errMsg,
           });
-        } else {
-          that.setData({
-            isItemLoading: false,
-            itemLoadingError: '系统问题',
-          });
+          reject('fail');
         }
-      },
-      fail: function (err) {
-        const { errMsg } = err;
-        that.setData({
-          isItemLoading: false,
-          itemLoadingError: errMsg,
-        });
-      }
+      });
     });
   },
   // 全局自动播放切换
@@ -155,19 +172,16 @@ Page({
     }
   },
   // 游客登录
-  onGeustClick: function () {
-    const that = this;
-    login(function (res) {
-      that.setData({ me: res });
-      // 把用户信息写在storage
-      wx.setStorage({
-        key: 'me',
-        data: res,
-      });
-      // 获取历史观看
-      that.loadHistories();
-      // 获取管理视频
-      that.loadItems();
+  onUserLogin: function (e) {
+    const { userInfo: me } = e.detail;
+    this.setData({ me });
+    wx.setStorage({
+      key: 'me',
+      data: me,
     });
+    // 获取历史观看
+    that.loadHistories();
+    // 获取管理视频
+    that.loadItems();
   }
 });

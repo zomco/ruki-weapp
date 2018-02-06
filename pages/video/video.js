@@ -130,6 +130,7 @@ Page({
       if (me) {
         // 登录用户直接更新行为
         wafer.request({
+          login: true,
           method: 'POST',
           data: {
             action: 'play',
@@ -154,6 +155,7 @@ Page({
       if (me) {
         // 登录用户直接更新行为
         wafer.request({
+          login: true,
           method: 'POST',
           data: {
             action: 'pause',
@@ -177,6 +179,7 @@ Page({
       if (me) {
         // 登录用户直接更新行为
         wafer.request({
+          login: true,
           method: 'POST',
           data: {
             action: 'end',

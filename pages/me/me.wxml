@@ -6,10 +6,15 @@
         <view class="profile__name">{{me.nickName}}</view>
       </view>
       <view wx:else class="profile">
-        <view
-          bindtap="onGeustClick"
-          class="material-icons md-60 profile__avatar"
-        >account_circle</view>
+        <button
+          plain
+          open-type="getUserInfo"
+          class="profile__login"
+          style="border-style:none;"
+          bindgetuserinfo="{{onUserLogin}}"
+        >
+          <view class="material-icons md-60 profile__avatar">account_circle</view>
+        </button>
         <view class="profile__name">游客</view>
       </view>
       <view class="videos">
@@ -66,7 +71,7 @@
             bindchange="onAutoPlayClick"
           />
         </view>
-        <view class="setting" bindtap="onCacheClick">
+        <view class="setting" hidden bindtap="onCacheClick">
           <view class="setting__text">清除缓存</view>
           <view lass="setting__tip">{{cacheSize}}</view>
         </view>

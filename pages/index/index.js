@@ -64,7 +64,11 @@ Page({
     try {
       // 获取用户信息
       const me = wx.getStorageSync('me');
-      this.setData({ me });
+      if (me) {
+        this.setData({ me });
+      } else {
+        this.setData({ me: null });
+      }
     } catch (e) {
       console.error(e);
     }
@@ -220,6 +224,7 @@ Page({
     if (me) {
       // 登录用户直接更新行为
       wafer.request({
+        login: true,
         method: 'POST',
         data: {
           action: 'play',
@@ -243,6 +248,7 @@ Page({
     if (me) {
       // 登录用户直接更新行为
       wafer.request({
+        login: true,
         method: 'POST',
         data: {
           action: 'pause',
@@ -267,6 +273,7 @@ Page({
     if (me) {
       // 登录用户直接更新行为
       wafer.request({
+        login: true,
         method: 'POST',
         data: {
           action: 'end',

@@ -72,27 +72,6 @@ Page({
       isPopupFocus: false,
     });
   },
-  // 选择视频上传
-  onChooseClick: function (e) {
-    const that = this;
-    wx.chooseVideo({
-      sourceType: ['album'],
-      compressed: false,
-      maxDuration: 30,
-      success: function (res) {
-        const {
-          tempFilePath,
-          thumbTempFilePath,
-        } = res;
-        that.setData({
-          videoFile: tempFilePath,
-          videoThumb: thumbTempFilePath,
-        });
-        // 自动执行上传
-        that.onUploadClick();
-      },
-    })
-  },
   // 取消上传
   onCancelClick: function (e) {
     if (this.task) {
@@ -104,45 +83,6 @@ Page({
       videoPhase: null,
       videoProgress: '',
     });
-  },
-  // 执行上传
-  onUploadClick: function (e) {
-    const { videoFile } = this.data;
-    const that = this;
-    that.setData({ videoPhase: 'load' });
-    // 模拟wafer从storage获取skey和id
-    wx.getStorage({
-      key: 'weapp_session_' + WX_SESSION_MAGIC_ID,
-      success: function (res) {
-        const { id, skey } = res.data;
-        const authHeader = {};
-        authHeader[WX_HEADER_ID] = id;
-        authHeader[WX_HEADER_SKEY] = skey;
-        const task = wx.uploadFile({
-          url: config.service.uploadUrl,
-          filePath: videoFile,
-          name: 'file',
-          header: authHeader,
-          success: function (res) {
-            const { raw, meta } = JSON.parse(res.data);
-            that.setData({
-              videoPhase: 'success',
-              videoRaw: raw,
-              date: meta.date,
-              time: meta.time,
-            });
-          },
-          fail: function (res) {
-            that.setData({ videoPhase: 'fail' });
-          }
-        });
-        task.onProgressUpdate(function (res) {
-          const { progress } = res;
-          that.setData({ videoProgress: progress });
-        });
-        that.task = task;
-      },
-    })
   },
   // 日期发生变化
   onDateClick: function (e) {
@@ -210,6 +150,7 @@ Page({
       submitingError: null,
     });
     wafer.request({
+      login: true,
       method: 'POST',
       data: {
         raw: videoRaw,
@@ -291,10 +232,84 @@ Page({
   // 登录成功
   onLoginSuccess: function (e) {
     const { userInfo: me } = e.detail;
-    this.setData({ me });
-    wx.setStorage({
-      key: 'me',
-      data: me,
-    });
+    const that = this;
+    if (me) {
+      that.setData({ me });
+      wx.setStorage({
+        key: 'me',
+        data: me,
+      });
+      wafer.login({
+        success: function (userInfo) {
+          that.chooseVideo();
+        },
+        fail: function (err) {
+          wx.showToast({
+            title: `登录失败(${err})`,
+            icon: 'none',
+          })
+        },
+      });
+    }
+  },
+  // 选择视频上传
+  chooseVideo: function (e) {
+    const that = this;
+    wx.chooseVideo({
+      sourceType: ['album'],
+      compressed: false,
+      maxDuration: 30,
+      success: function (res) {
+        const {
+          tempFilePath,
+          thumbTempFilePath,
+        } = res;
+        that.setData({
+          videoFile: tempFilePath,
+          videoThumb: thumbTempFilePath,
+        });
+        // 自动执行上传
+        that.uploadVideo();
+      },
+    })
+  },
+  // 执行上传
+  uploadVideo: function (e) {
+    const { videoFile } = this.data;
+    const that = this;
+    that.setData({ videoPhase: 'load' });
+    // 模拟wafer从storage获取skey和id
+    wx.getStorage({
+      key: 'weapp_session_' + WX_SESSION_MAGIC_ID,
+      success: function (res) {
+        const { id, skey } = res.data;
+        const authHeader = {};
+        authHeader[WX_HEADER_ID] = id;
+        authHeader[WX_HEADER_SKEY] = skey;
+        const task = wx.uploadFile({
+          url: config.service.uploadUrl,
+          filePath: videoFile,
+          name: 'file',
+          header: authHeader,
+          success: function (res) {
+            const { raw, meta } = JSON.parse(res.data);
+            that.setData({
+              videoPhase: 'success',
+              videoRaw: raw,
+              date: meta.date,
+              time: meta.time,
+            });
+          },
+          fail: function (res) {
+            that.setData({ videoPhase: 'fail' });
+          }
+        });
+        task.onProgressUpdate(function (res) {
+          const { progress } = res;
+          that.setData({ videoProgress: progress });
+        });
+        that.task = task;
+      },
+    })
   },
 });
