@@ -10,16 +10,16 @@
         "backgroundTextStyle": "dark",
         "enablePullDownRefresh": true,
         "onReachBottomDistance": 50,
-        "navigationBarBackgroundColor": "white",
+        "navigationBarBackgroundColor": "#ffffff",
         "navigationBarTitleText": "路几",
         "navigationBarTextStyle": "black"
     },
     "tabBar": {
-      "color": "black",
+      "color": "#000000",
       "selectedColor1": "#607d8b",
       "selectedColor": "#f8b62d",
-      "backgroundColor": "white",
-      "borderStyle": "black",
+      "backgroundColor": "#ffffff",
+      "borderStyle": "#000000",
       "list": [
         {
           "pagePath": "pages/index/index",

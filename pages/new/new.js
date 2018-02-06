@@ -133,7 +133,7 @@ Page({
             });
           },
           fail: function (res) {
-            that.setDat({ videoPhase: 'fail' });
+            that.setData({ videoPhase: 'fail' });
           }
         });
         task.onProgressUpdate(function (res) {
