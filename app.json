@@ -4,7 +4,8 @@
         "pages/video/video",
         "pages/new/new",
         "pages/me/me",
-        "pages/terms/terms"
+        "pages/terms/terms",
+        "pages/search/search"
     ],
     "window": {
         "backgroundTextStyle": "dark",
@@ -16,7 +17,6 @@
     },
     "tabBar": {
       "color": "#000000",
-      "selectedColor1": "#607d8b",
       "selectedColor": "#f8b62d",
       "backgroundColor": "#ffffff",
       "borderStyle": "#000000",
@@ -28,10 +28,10 @@
           "selectedIconPath": "images/home_ruki.png"
         },
         {
-          "pagePath": "pages/new/new",
-          "text": "上传",
-          "iconPath": "images/add_grey.png",
-          "selectedIconPath": "images/add_ruki.png"
+          "pagePath": "pages/search/search",
+          "text": "搜索",
+          "iconPath": "images/search_grey.png",
+          "selectedIconPath": "images/search_ruki.png"
         },
         {
           "pagePath": "pages/me/me",

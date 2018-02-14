@@ -111,11 +111,11 @@
         <!-- 视频底部放置按钮 -->
         <view class="item__footer">
           <view class="item__actions">
-            <view
+            <!-- <view
               class="material-icons item__action"
               data-url="/pages/video/video?id={{item.node.id}}"
               bindtap="onLikeClick"
-            >comment</view>
+            >comment</view> -->
             <view
               class="material-icons item__action"
               data-url="/pages/video/video?id={{item.node.id}}"
