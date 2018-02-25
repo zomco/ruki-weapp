@@ -11,14 +11,14 @@
           open-type="getUserInfo"
           class="profile__login"
           style="border-style:none;"
-          bindgetuserinfo="{{onUserLogin}}"
+          bindgetuserinfo="onUserLogin"
         >
           <view class="material-icons md-60 profile__avatar">account_circle</view>
         </button>
         <view class="profile__name">游客</view>
       </view>
       <view class="videos">
-        <view class="video">
+        <view class="video" hidden="{{!me}}">
           <view class="video__header">
             <view class="video__text">观看历史</view>
             <view class="video__action">
@@ -39,7 +39,7 @@
             </navigator>
           </scroll-view>
         </view>
-        <view class="video">
+        <view class="video" hidden="{{!me}}">
           <view class="video__header">
             <view class="video__text">我的视频</view>
             <view class="video__action">

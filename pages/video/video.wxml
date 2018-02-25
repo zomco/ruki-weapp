@@ -57,7 +57,7 @@
           <view class="video__tags">
             <view class="video__tag">{{video.when}}</view>
             <view class="video__tag">{{video?'·':''}}</view>
-            <view class="video__tag">{{video.where}}</view>
+            <view class="video__tag">{{video.whereText}}</view>
             <view class="video__tag">{{video?'·':''}}</view>
             <view class="video__tag">{{video.clicks}}</view>
           </view> 

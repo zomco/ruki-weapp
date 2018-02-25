@@ -22,8 +22,8 @@
  # SOFTWARE.
  */
 
-var host = 'https://www.ruki.pw';
-// var host = 'http://localhost:3000';
+// var host = 'https://www.ruki.pw';
+var host = 'http://localhost:3000';
 
 var config = {
   

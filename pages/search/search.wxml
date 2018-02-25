@@ -1,14 +1,19 @@
 <view class="page" bindtap="bindKeyboardHide">
   <view class="page__bd page__bd_spacing">
-    <view wx:if="{{isSearch}}" class="search">
-    </view>
-    <view wx:else class="result">
-      <view class="input">
-        <view class="material-icons input__icon">search</view>
-        <view class="input__text">请输入车牌号或标题关键字</view>
+    <view wx:if="{{isOk}}">
+      <view wx:if="{{isSearch}}" class="search">
       </view>
-      <view class="covers"></view>
-      <view class="collections"></view>
+      <view wx:else class="result">
+        <view class="input">
+          <view class="material-icons input__icon">search</view>
+          <view class="input__text">请输入车牌号或标题关键字</view>
+        </view>
+        <view class="covers"></view>
+        <view class="collections"></view>
+      </view>
+    </view>
+    <view wx:else class="tip">
+      搜索功能稍后开放
     </view>
   </view>
 </view>

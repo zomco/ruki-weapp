@@ -71,6 +71,7 @@ Page({
       wx.stopPullDownRefresh();
     });
   },
+  // 加载观看历史
   loadHistories: function () {
     const that = this;
     return new Promise(function (resolve, reject) {
@@ -112,6 +113,7 @@ Page({
       });
     });
   },
+  // 加载我的视频
   loadItems: function () {
     const that = this;
     return new Promise(function (resolve, reject) {
@@ -174,14 +176,16 @@ Page({
   // 游客登录
   onUserLogin: function (e) {
     const { userInfo: me } = e.detail;
-    this.setData({ me });
-    wx.setStorage({
-      key: 'me',
-      data: me,
-    });
-    // 获取历史观看
-    that.loadHistories();
-    // 获取管理视频
-    that.loadItems();
-  }
+    if (me) {
+      // 获取历史观看
+      this.loadHistories();
+      // 获取管理视频
+      this.loadItems();
+      this.setData({ me });
+      wx.setStorage({
+        key: 'me',
+        data: me,
+      });
+    }
+  },
 });
